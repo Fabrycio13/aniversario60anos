@@ -579,8 +579,8 @@
             // 👇 CONFIGURE AQUI
             // ============================================================
 
-            /** URL do Google Apps Script Web App */
-            const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzI98g99E5qUUziPOnwjGWphM9F_R3klKaZQljZK2oWSj8M-2kmjW-lE1soUXd-otn-qw/exec';
+            const SUPABASE_URL = 'https://qhkcilkqtcdevkksovp.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoa2NpbHFrdGNkZXZra3lzb3ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3NTk5NzksImV4cCI6MjEwMDMzNTk3OX0.gGg83qvinqHsZkdRacGYVRheCwawWeUKAHCiEpni9LU';
 
             /** Data limite para confirmações (formato: AAAA-MM-DD) */
             const DATA_LIMITE = '2026-11-01';
@@ -726,21 +726,26 @@
                 const data = {
                     nome: nome,
                     presenca: presenca,
-                    qtd_dependentes: presenca === 'Sim' ? qtdDep.value : '0',
+                    qtd_dependentes: presenca === 'Sim' ? parseInt(qtdDep.value) : 0,
                     acompanhantes: acompanhantes,
-                    mensagem: document.getElementById('mensagem').value.trim(),
-                    timestamp: new Date().toISOString()
+                    mensagem: document.getElementById('mensagem').value.trim()
                 };
 
                 setLoading(true);
 
                 try {
-                    await fetch(APPS_SCRIPT_URL, {
+                    const res = await fetch(SUPABASE_URL + '/rest/v1/confirmacoes', {
                         method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'text/plain' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                            'Prefer': 'return=minimal'
+                        },
                         body: JSON.stringify(data)
                     });
+
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
 
                     const msg = presenca === 'Sim'
                         ? '✅ Presença confirmada com sucesso! Mal podemos esperar! 🎂'
