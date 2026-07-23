@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Festa Dona Maria — Confirme sua Presença</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f3ee;
+            color: #3d2c1f;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(180deg, #f2ebe3 0%, #e8ddd0 100%);
+            color: #3d2c1f;
+            text-align: center;
+            padding: 4rem 1.5rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '🌸 🌿 🌷 🌾 🌻';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            right: 0;
+            font-size: 2.2rem;
+            letter-spacing: 1.5rem;
+            opacity: 0.25;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to top, #f7f3ee, transparent);
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+
+        .hero-foto {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 20px rgba(61, 44, 31, 0.12);
+            margin-bottom: 1.2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5.5vw, 3.2rem);
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            color: #3d2c1f;
+            margin-bottom: 0.3rem;
+        }
+        .hero .subtitle {
+            font-size: clamp(0.95rem, 2vw, 1.15rem);
+            font-weight: 400;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: #6b5a4a;
+        }
+        .hero .divider {
+            width: 60px;
+            height: 2px;
+            background: #b8a894;
+            margin: 1rem auto;
+        }
+        .hero .date {
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+            color: #5a4a3a;
+        }
+        .hero .date strong {
+            font-weight: 600;
+            color: #3d2c1f;
+        }
+
+        /* ===== DETAILS BAR ===== */
+        .details-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.8rem;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .details-bar .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.92rem;
+            color: #5a4a3a;
+        }
+        .details-bar .detail-icon { font-size: 1.2rem; }
+
+        /* ===== MAIN CARD ===== */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3.5rem;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .intro-text p {
+            font-size: 1rem;
+            color: #5a4a3a;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .intro-text .floral {
+            font-size: 1.3rem;
+            letter-spacing: 0.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .rsvp-card {
+            background: #fffdfa;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 6px 28px rgba(61, 44, 31, 0.06);
+            border: 1px solid rgba(184, 168, 148, 0.2);
+            position: relative;
+        }
+        .rsvp-card::before,
+        .rsvp-card::after {
+            content: '❀';
+            position: absolute;
+            font-size: 1.2rem;
+            opacity: 0.15;
+            color: #7a9e7e;
+        }
+        .rsvp-card::before { top: 12px; left: 16px; }
+        .rsvp-card::after { bottom: 12px; right: 16px; }
+
+        /* ===== EXPIRADO ===== */
+        .expirado-box {
+            display: none;
+            text-align: center;
+            padding: 3rem 1.5rem;
+        }
+        .expirado-box.visible {
+            display: block;
+            animation: fadeSlideIn 0.5s ease;
+        }
+        .expirado-box .expirado-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .expirado-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .expirado-box p {
+            color: #6b5a4a;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.88rem;
+            color: #3d2c1f;
+            margin-bottom: 0.35rem;
+        }
+        .form-group label .required {
+            color: #c0392b;
+            margin-left: 2px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid #e0d6cc;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: #fefcf9;
+            color: #3d2c1f;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #7a9e7e;
+            box-shadow: 0 0 0 3px rgba(122, 158, 126, 0.12);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        /* Radio group */
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.3rem;
+        }
+        .radio-option {
+            flex: 1;
+            position: relative;
+        }
+        .radio-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .radio-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1rem;
+            border: 1.5px solid #e0d6cc;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background: #fefcf9;
+            margin-bottom: 0;
+        }
+        .radio-option input:checked + label {
+            border-color: #7a9e7e;
+            background: #f0f7ef;
+            color: #2d4a2e;
+        }
+        .radio-option label:hover {
+            border-color: #a8c4ab;
+        }
+        .radio-option input:focus + label {
+            box-shadow: 0 0 0 3px rgba(122, 158, 126, 0.12);
+        }
+
+        /* Dependentes conditional */
+        .dependentes-section {
+            display: none;
+            animation: fadeSlideIn 0.3s ease;
+        }
+        .dependentes-section.visible {
+            display: block;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dependente-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 0.6rem;
+            padding: 0.7rem;
+            background: #faf7f4;
+            border-radius: 10px;
+            border: 1px solid #ede6de;
+        }
+        .dependente-row input {
+            flex: 1;
+            padding: 0.6rem 0.8rem;
+            border: 1.5px solid #e0d6cc;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            background: #fefcf9;
+        }
+        .dependente-row input:focus {
+            outline: none;
+            border-color: #7a9e7e;
+        }
+        .dependente-row .dep-number {
+            min-width: 1.5rem;
+            font-weight: 500;
+            color: #6b5a4a;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        /* Submit button */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #7a9e7e, #5f8363);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s;
+            margin-top: 0.5rem;
+        }
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(122, 158, 126, 0.35);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== MESSAGES ===== */
+        .form-message {
+            display: none;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            text-align: center;
+            animation: fadeSlideIn 0.2s ease;
+        }
+        .form-message.success {
+            display: block;
+            background: #eaf5ea;
+            color: #3a7a3e;
+            border: 1px solid #b8dbb8;
+        }
+        .form-message.error {
+            display: block;
+            background: #fce8e6;
+            color: #b33a2a;
+            border: 1px solid #f5c6c2;
+        }
+        .form-message.loading {
+            display: block;
+            background: #fef5e6;
+            color: #8a6a2a;
+            border: 1px solid #f5deb2;
+        }
+
+        .form-message.info {
+            display: block;
+            background: #e8f0fa;
+            color: #3a5a7a;
+            border: 1px solid #b8cce0;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(138, 106, 42, 0.2);
+            border-top-color: #8a6a2a;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== FLORAL DIVIDER ===== */
+        .section-divider {
+            text-align: center;
+            font-size: 1rem;
+            letter-spacing: 0.6rem;
+            color: #b8a894;
+            margin: 1.5rem 0;
+            opacity: 0.4;
+        }
+
+        /* ===== CONFIRMADOS ===== */
+        .confirmed-section {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .confirmed-section p {
+            font-size: 0.88rem;
+            color: #8a7a6a;
+        }
+
+        /* ===== INFO RE-SUBMIT ===== */
+        .resubmit-info {
+            margin-top: 1rem;
+            padding: 0.8rem 1rem;
+            background: #faf7f4;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #8a7a6a;
+            text-align: center;
+            border: 1px solid #ede6de;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: #8a7a6a;
+            font-size: 0.82rem;
+            border-top: 1px solid #e8ddd0;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .hero { padding: 2.5rem 1rem 2rem; }
+            .hero-foto { width: 120px; height: 120px; }
+            .rsvp-card { padding: 1.5rem 1.2rem; }
+            .radio-group { flex-direction: column; gap: 0.5rem; }
+            .details-bar { gap: 0.8rem; padding: 0.8rem 1rem; }
+            .details-bar .detail-item { font-size: 0.82rem; }
+            .dependente-row { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-content">
+            <img src="Convite dona Maria.jpeg"
+                 alt="Foto da aniversariante"
+                 class="hero-foto" />
+
+            <h1>Festa Dona Maria</h1>
+            <p class="subtitle">Vamos celebrar juntos mais um ano de vida!</p>
+            <div class="divider"></div>
+            <p class="date">
+                <strong>15 de Novembro de 2026</strong> — Sábado — <strong>19h</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- ===== DETALHES ===== -->
+    <div class="details-bar">
+        <span class="detail-item">
+            <span class="detail-icon">📍</span>
+            Rua das Flores, 123 — Salão de Festas
+        </span>
+        <span class="detail-item">
+            <span class="detail-icon">👗</span>
+            Traje: Esporte Fino
+        </span>
+        <span class="detail-item">
+            <span class="detail-icon">💐</span>
+            Confirme até 01/11
+        </span>
+    </div>
+
+    <!-- ===== FORMULÁRIO ===== -->
+    <div class="container">
+        <div class="intro-text">
+            <div class="floral">✿ ❀ ✿</div>
+            <p>
+                Sua presença vai tornar esse dia ainda mais especial!
+                Confirme abaixo para que possamos preparar tudo com carinho.
+            </p>
+        </div>
+
+        <div class="rsvp-card">
+            <!-- Mensagens de feedback -->
+            <div id="form-message" class="form-message"></div>
+
+            <!-- Formulário ativo -->
+            <div id="form-ativo">
+                <form id="rsvp-form" novalidate>
+                    <!-- Nome -->
+                    <div class="form-group">
+                        <label for="nome">Seu nome completo <span class="required">*</span></label>
+                        <input type="text" id="nome" name="nome"
+                               placeholder="Ex: Maria Silva" required autocomplete="name" />
+                    </div>
+
+                    <!-- Confirmação -->
+                    <div class="form-group">
+                        <label>Confirma presença? <span class="required">*</span></label>
+                        <div class="radio-group" id="presenca-group">
+                            <div class="radio-option">
+                                <input type="radio" id="presenca-sim" name="presenca" value="Sim" required />
+                                <label for="presenca-sim">🌸 Sim, vou!</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="presenca-nao" name="presenca" value="Não" />
+                                <label for="presenca-nao">🌱 Não poderei ir</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dependentes -->
+                    <div class="dependentes-section" id="dependentes-section">
+                        <div class="form-group">
+                            <label for="qtd-dependentes">Acompanhantes / Dependentes</label>
+                            <select id="qtd-dependentes" name="qtd_dependentes">
+                                <option value="0">0 — Vou sozinho(a)</option>
+                                <option value="1">1 acompanhante</option>
+                                <option value="2">2 acompanhantes</option>
+                                <option value="3">3 acompanhantes</option>
+                                <option value="4">4 acompanhantes</option>
+                                <option value="5">5 ou mais</option>
+                            </select>
+                        </div>
+                        <div id="dependentes-nomes"></div>
+                    </div>
+
+                    <!-- Mensagem -->
+                    <div class="form-group">
+                        <label for="mensagem">Algum recado ou observação?</label>
+                        <textarea id="mensagem" name="mensagem"
+                                  placeholder="Restrições alimentares, preferência de mesa, etc."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="btn-submit">
+                        Confirmar Presença
+                    </button>
+                </form>
+
+                <div class="resubmit-info">
+                    🔄 Já preencheu antes? Pode preencher de novo para <strong>atualizar</strong> seus dados — a versão mais recente será considerada.
+                </div>
+            </div>
+
+            <!-- Mensagem de expirado (aparece após a data limite) -->
+            <div class="expirado-box" id="expirado-box">
+                <div class="expirado-icon">🌷</div>
+                <h2>Confirmações encerradas</h2>
+                <p>O prazo para confirmar presença já passou. Se precisar de alguma informação, entre em contato conosco.</p>
+            </div>
+        </div>
+
+        <div class="section-divider">✿ ❀ ✿ ❀ ✿</div>
+
+        <!-- ===== CONTADOR ===== -->
+        <div class="confirmed-section">
+            <p id="count-text">📋 Os confirmados aparecerão na planilha do Google</p>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        Feito com 💚 para a Festa Dona Maria
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // 👇 CONFIGURE AQUI
+            // ============================================================
+
+            /** URL do Google Apps Script Web App */
+            const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/SEU_ID_AQUI/exec';
+
+            /** Data limite para confirmações (formato: AAAA-MM-DD) */
+            const DATA_LIMITE = '2026-11-01';
+
+            /** Data do evento (só para exibição) */
+            const DATA_EVENTO = '2026-11-15';
+
+            // ============================================================
+
+            const form = document.getElementById('rsvp-form');
+            const formAtivo = document.getElementById('form-ativo');
+            const expiradoBox = document.getElementById('expirado-box');
+            const messageEl = document.getElementById('form-message');
+            const submitBtn = document.getElementById('btn-submit');
+            const presencaSim = document.getElementById('presenca-sim');
+            const presencaNao = document.getElementById('presenca-nao');
+            const depSection = document.getElementById('dependentes-section');
+            const qtdDep = document.getElementById('qtd-dependentes');
+            const depNomes = document.getElementById('dependentes-nomes');
+
+            // ---- Verificar expiração ----
+            function verificarExpiracao() {
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
+                const limite = new Date(DATA_LIMITE + 'T23:59:59');
+
+                if (hoje > limite) {
+                    formAtivo.style.display = 'none';
+                    expiradoBox.classList.add('visible');
+                } else {
+                    formAtivo.style.display = 'block';
+                    expiradoBox.classList.remove('visible');
+                }
+            }
+
+            verificarExpiracao();
+
+            // ---- Mostra/esconde dependentes ----
+            function toggleDependentes() {
+                if (presencaSim.checked) {
+                    depSection.classList.add('visible');
+                    renderDepInputs();
+                } else {
+                    depSection.classList.remove('visible');
+                }
+            }
+
+            presencaSim.addEventListener('change', toggleDependentes);
+            presencaNao.addEventListener('change', toggleDependentes);
+
+            // ---- Renderiza campos de nome dos acompanhantes ----
+            function renderDepInputs() {
+                const qtd = parseInt(qtdDep.value, 10);
+                depNomes.innerHTML = '';
+
+                if (qtd === 0) return;
+
+                if (qtd <= 4) {
+                    for (let i = 1; i <= qtd; i++) {
+                        const row = document.createElement('div');
+                        row.className = 'dependente-row';
+                        row.innerHTML = `
+                            <span class="dep-number">${i}.</span>
+                            <input type="text" class="dep-nome"
+                                   name="acompanhante_${i}"
+                                   placeholder="Nome do acompanhante ${i}" />
+                        `;
+                        depNomes.appendChild(row);
+                    }
+                } else {
+                    const row = document.createElement('div');
+                    row.className = 'dependente-row';
+                    row.innerHTML = `
+                        <span class="dep-number">✚</span>
+                        <input type="text" class="dep-nome"
+                               name="acompanhantes_lista"
+                               placeholder="Nomes dos acompanhantes (separados por vírgula)" />
+                    `;
+                    depNomes.appendChild(row);
+                }
+            }
+
+            qtdDep.addEventListener('change', renderDepInputs);
+
+            // ---- Feedback ----
+            function showMessage(type, text) {
+                messageEl.className = 'form-message ' + type;
+                messageEl.textContent = text;
+                messageEl.style.display = 'block';
+            }
+
+            function hideMessage() {
+                messageEl.className = 'form-message';
+                messageEl.style.display = 'none';
+            }
+
+            function setLoading(isLoading) {
+                if (isLoading) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner"></span> Enviando...';
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Confirmar Presença';
+                }
+            }
+
+            // ---- Submit ----
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                hideMessage();
+
+                const nome = document.getElementById('nome').value.trim();
+                if (!nome) {
+                    showMessage('error', 'Por favor, informe seu nome.');
+                    document.getElementById('nome').focus();
+                    return;
+                }
+
+                if (!presencaSim.checked && !presencaNao.checked) {
+                    showMessage('error', 'Selecione se confirma ou não presença.');
+                    return;
+                }
+
+                const presenca = presencaSim.checked ? 'Sim' : 'Não';
+
+                let acompanhantes = '';
+                if (presenca === 'Sim') {
+                    const qtd = parseInt(qtdDep.value, 10);
+                    if (qtd > 0 && qtd <= 4) {
+                        const nomes = depNomes.querySelectorAll('.dep-nome');
+                        const lista = [];
+                        nomes.forEach(input => {
+                            const v = input.value.trim();
+                            if (v) lista.push(v);
+                        });
+                        acompanhantes = lista.join('; ');
+                    } else if (qtd >= 5) {
+                        const input = depNomes.querySelector('.dep-nome');
+                        if (input) acompanhantes = input.value.trim();
+                    }
+                }
+
+                const data = {
+                    nome: nome,
+                    presenca: presenca,
+                    qtd_dependentes: presenca === 'Sim' ? qtdDep.value : '0',
+                    acompanhantes: acompanhantes,
+                    mensagem: document.getElementById('mensagem').value.trim(),
+                    timestamp: new Date().toISOString()
+                };
+
+                setLoading(true);
+
+                try {
+                    await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    const msg = presenca === 'Sim'
+                        ? '✅ Presença confirmada com sucesso! Mal podemos esperar! 🎂'
+                        : '📝 Tudo bem! Agradecemos o retorno.';
+
+                    showMessage('success', msg + ' Se precisar alterar algo, é só preencher novamente.');
+                    form.reset();
+                    depSection.classList.remove('visible');
+                    depNomes.innerHTML = '';
+
+                } catch (err) {
+                    console.error('Erro ao enviar:', err);
+                    showMessage('error', 'Ops, não foi possível enviar. Tente novamente ou avise pelo WhatsApp.');
+                } finally {
+                    setLoading(false);
+                }
+            });
+
+            // ---- Inicialização ----
+            toggleDependentes();
+
+        })();
+    </script>
+
+</body>
+</html>
