@@ -254,7 +254,7 @@
             }
 
             // Limpa tabela e salva tudo de novo
-            await fetch(SB_URL + '/rest/v1/links_gerados', {
+            await fetch(SB_URL + '/rest/v1/links_gerados?id=neq.0', {
                 method: 'DELETE',
                 headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
             }).catch(() => {});
@@ -323,7 +323,7 @@
         }
 
         async function limpar() {
-            await fetch(SB_URL + '/rest/v1/links_gerados', {
+            await fetch(SB_URL + '/rest/v1/links_gerados?id=neq.0', {
                 method: 'DELETE',
                 headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
             }).catch(() => {});
