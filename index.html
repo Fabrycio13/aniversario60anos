@@ -52,14 +52,13 @@
 
         .hero-content { position: relative; z-index: 1; }
 
-        .hero-foto {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #fff;
-            box-shadow: 0 4px 20px rgba(61, 44, 31, 0.12);
-            margin-bottom: 1.2rem;
+        .hero-invite-img {
+            width: 100%;
+            max-width: 460px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(61, 44, 31, 0.15);
+            margin-bottom: 0;
+            display: block;
         }
 
         .hero h1 {
@@ -447,34 +446,42 @@
 
     <!-- ===== HERO ===== -->
     <section class="hero">
-        <div class="hero-content">
-            <img src="Convite dona Maria.jpeg"
-                 alt="Foto da aniversariante"
-                 class="hero-foto" />
-
-            <h1>Festa Dona Maria</h1>
-            <p class="subtitle">60 anos de histórias, alegria e muito amor! 🎂</p>
-            <div class="divider"></div>
-            <p class="date">
-                <strong>15 de Novembro de 2026</strong> — Sábado — <strong>19h</strong>
-            </p>
-        </div>
+    <div class="hero-content">
+        <!-- Convite em imagem -->
+        <img src="Convite dona Maria.webp"
+             alt="Convite Festa Dona Maria - 60 Anos"
+             class="hero-invite-img" />
+    </div>
     </section>
 
     <!-- ===== DETALHES ===== -->
     <div class="details-bar">
-        <span class="detail-item">
-            <span class="detail-icon">📍</span>
-            Rua das Flores, 123 — Salão de Festas
-        </span>
-        <span class="detail-item">
-            <span class="detail-icon">👗</span>
-            Traje: Esporte Fino
-        </span>
-        <span class="detail-item">
-            <span class="detail-icon">💐</span>
-            Confirme até 01/11
-        </span>
+    <span class="detail-item">
+        <span class="detail-icon">📅</span>
+        12 de Setembro de 2026 (Sábado)
+    </span>
+    <span class="detail-item">
+        <span class="detail-icon">⏰</span>
+        13h às 20h
+    </span>
+    <span class="detail-item">
+        <span class="detail-icon">📍</span>
+        Rua Caraibuna, 11 — Taquara
+    </span>
+    <span class="detail-item">
+        <span class="detail-icon">💐</span>
+        Confirme até 01/09
+    </span>
+    </div>
+
+    <!-- ===== INFO ADICIONAL ===== -->
+    <div class="container" style="padding-top: 0; padding-bottom: 0;">
+    <div class="rsvp-card" style="margin-top: -0.5rem; padding: 1.2rem 1.5rem; text-align: center;">
+        <p style="color: #5a4a3a; font-size: 0.9rem; margin: 0;">
+            🏊 <strong>O local tem piscina!</strong> Traga traje de banho e toalha.<br />
+            🍷 Quem quiser consumir bebida alcoólica, pedimos a gentileza de trazer a sua.
+        </p>
+    </div>
     </div>
 
     <!-- ===== FORMULÁRIO ===== -->
@@ -583,10 +590,10 @@
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoa2NpbHFrdGNkZXZra3lzb3ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3NTk5NzksImV4cCI6MjEwMDMzNTk3OX0.gGg83qvinqHsZkdRacGYVRheCwawWeUKAHCiEpni9LU';
 
             /** Data limite para confirmações (formato: AAAA-MM-DD) */
-            const DATA_LIMITE = '2026-11-01';
+            const DATA_LIMITE = '2026-09-01';
 
             /** Data do evento (só para exibição) */
-            const DATA_EVENTO = '2026-11-15';
+            const DATA_EVENTO = '2026-09-12';
 
             // ============================================================
 
