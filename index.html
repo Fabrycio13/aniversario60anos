@@ -21,11 +21,37 @@
 
         /* ===== HERO ===== */
         .hero {
-            background: #fff;
+            background: linear-gradient(180deg, #f7f0e6 0%, #ede2d4 100%);
             text-align: center;
-            padding: 0;
+            padding: 1.5rem 1rem;
             position: relative;
             overflow: hidden;
+        }
+        .hero::before {
+            content: '🌸 🌿 🌷 🌻 🌾';
+            position: absolute;
+            top: 8px;
+            left: 0;
+            right: 0;
+            font-size: 1.8rem;
+            letter-spacing: 1.2rem;
+            opacity: 0.3;
+            white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
+        }
+        .hero::after {
+            content: '🌾 🌻 🌷 🌿 🌸';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            font-size: 1.8rem;
+            letter-spacing: 1.2rem;
+            opacity: 0.3;
+            white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
         }
         .hero-banner {
             width: 40%;
