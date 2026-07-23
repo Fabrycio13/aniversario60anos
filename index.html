@@ -888,6 +888,16 @@
                 <!-- Mensagem de Feedback -->
                 <div id="form-message" class="form-message"></div>
 
+                <!-- Bloqueio: sem ?nome não acessa -->
+                <div id="acesso-negado" style="display: none; text-align: center; padding: 2rem 1rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.8rem;">🔗</div>
+                    <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 1.3rem; margin-bottom: 0.5rem;">Link não reconhecido</h2>
+                    <p style="color: var(--ink-soft); font-size: 0.9rem; max-width: 350px; margin: 0 auto;">
+                        Este convite é pessoal e intransferível.<br />
+                        Solicite seu link personalizado para a aniversariante.
+                    </p>
+                </div>
+
                 <!-- Formulário Ativo -->
                 <div id="form-ativo">
                     <form id="rsvp-form" novalidate>
@@ -927,13 +937,6 @@
                                 </select>
                             </div>
                             <div id="dependentes-nomes"></div>
-                        </div>
-
-                        <!-- Mensagem ao Anfitrião -->
-                        <div class="form-group">
-                            <label for="mensagem">Deixe uma mensagem para a Dona Maria</label>
-                            <textarea id="mensagem" name="mensagem" class="form-textarea"
-                                      placeholder="Deixe um carinho, parabéns ou observação especial..."></textarea>
                         </div>
 
                         <button type="submit" class="btn-submit" id="btn-submit">
@@ -1284,13 +1287,20 @@
             function prefillFromURL() {
                 const params = new URLSearchParams(window.location.search);
                 const nomeParam = params.get('nome');
-                if (nomeParam) {
-                    const nomeField = document.getElementById('nome');
-                    nomeField.value = nomeParam.replace(/\+/g, ' ');
-                    nomeField.readOnly = true;
-                    nomeField.style.background = '#f7f1e3';
-                    nomeField.style.cursor = 'default';
+                const formAtivo = document.getElementById('form-ativo');
+                const acessoNegado = document.getElementById('acesso-negado');
+
+                if (!nomeParam) {
+                    formAtivo.style.display = 'none';
+                    acessoNegado.style.display = 'block';
+                    return;
                 }
+
+                const nomeField = document.getElementById('nome');
+                nomeField.value = nomeParam.replace(/\+/g, ' ');
+                nomeField.readOnly = true;
+                nomeField.style.background = '#f7f1e3';
+                nomeField.style.cursor = 'default';
             }
             prefillFromURL();
 
