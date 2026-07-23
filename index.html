@@ -21,43 +21,17 @@
 
         /* ===== HERO ===== */
         .hero {
-            background: linear-gradient(180deg, #f2ebe3 0%, #e8ddd0 100%);
-            color: #3d2c1f;
+            background: #f2ebe3;
             text-align: center;
-            padding: 4rem 1.5rem 3rem;
+            padding: 0;
             position: relative;
             overflow: hidden;
         }
-        .hero::before {
-            content: '🌸 🌿 🌷 🌾 🌻';
-            position: absolute;
-            top: -10px;
-            left: 0;
-            right: 0;
-            font-size: 2.2rem;
-            letter-spacing: 1.5rem;
-            opacity: 0.25;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(to top, #f7f3ee, transparent);
-        }
-
-        .hero-content { position: relative; z-index: 1; }
-
-        .hero-invite-img {
+        .hero-banner {
             width: 100%;
-            max-width: 460px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(61, 44, 31, 0.15);
-            margin-bottom: 0;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
             display: block;
         }
 
@@ -446,12 +420,9 @@
 
     <!-- ===== HERO ===== -->
     <section class="hero">
-    <div class="hero-content">
-        <!-- Convite em imagem -->
-        <img src="Convite dona Maria.webp"
-             alt="Convite Festa Dona Maria - 60 Anos"
-             class="hero-invite-img" />
-    </div>
+        <img src="banner.webp"
+             alt="Festa Dona Maria - 60 Anos"
+             class="hero-banner" />
     </section>
 
     <!-- ===== DETALHES ===== -->
