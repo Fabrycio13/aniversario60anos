@@ -1184,6 +1184,24 @@
                     document.getElementById('nome').focus();
                     return;
                 }
+                // Validações só quando o campo é editável (sem prefill)
+                if (!document.getElementById('nome').readOnly) {
+                    if (nome.split(/\s+/).filter(Boolean).length < 2) {
+                        showMessage('error', 'Por favor, informe seu nome e sobrenome (ex: Maria Silva).');
+                        document.getElementById('nome').focus();
+                        return;
+                    }
+                    if (nome.length < 4) {
+                        showMessage('error', 'Nome muito curto. Informe nome e sobrenome.');
+                        document.getElementById('nome').focus();
+                        return;
+                    }
+                    if (!/[a-zA-ZÀ-ÿ]/.test(nome)) {
+                        showMessage('error', 'O nome deve conter pelo menos uma letra.');
+                        document.getElementById('nome').focus();
+                        return;
+                    }
+                }
 
                 if (!presencaSim.checked && !presencaNao.checked) {
                     showMessage('error', 'Por favor, selecione se confirma ou não sua presença.');
@@ -1251,6 +1269,20 @@
             });
 
             // Inicialização
+            // ---- Pré-preencher nome via query string (?nome=...) ----
+            function prefillFromURL() {
+                const params = new URLSearchParams(window.location.search);
+                const nomeParam = params.get('nome');
+                if (nomeParam) {
+                    const nomeField = document.getElementById('nome');
+                    nomeField.value = nomeParam.replace(/\+/g, ' ');
+                    nomeField.readOnly = true;
+                    nomeField.style.background = '#f7f1e3';
+                    nomeField.style.cursor = 'default';
+                }
+            }
+            prefillFromURL();
+
             toggleDependentes();
 
         })();

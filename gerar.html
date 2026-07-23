@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador de Links — Festa Dona Maria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --cream: #f7f1e3;
+            --gold: #c9a876;
+            --gold-deep: #a8865a;
+            --ink: #2a2017;
+            --ink-soft: #6b5a4a;
+            --line: rgba(168, 134, 90, 0.2);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .wrap {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            font-size: 2rem;
+            letter-spacing: 0.02em;
+        }
+        header p {
+            color: var(--ink-soft);
+            font-size: 0.9rem;
+            margin-top: 0.4rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 6px 24px -10px rgba(42, 32, 23, 0.15);
+            border: 1px solid var(--line);
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: 0.4rem;
+        }
+        .base-url {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: monospace;
+            background: #fdfaf4;
+        }
+        textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 0.8rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            resize: vertical;
+            background: #fdfaf4;
+        }
+        .row { display: flex; gap: 0.5rem; }
+        .row textarea { flex: 1; }
+        button {
+            padding: 0.7rem 1.2rem;
+            background: var(--ink);
+            color: var(--cream);
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            letter-spacing: 0.06em;
+            transition: background 0.2s;
+        }
+        button:hover { background: var(--gold-deep); }
+        button.gold {
+            background: var(--gold-deep);
+        }
+        button.gold:hover { background: var(--ink); }
+        .links-list {
+            max-height: 420px;
+            overflow-y: auto;
+            margin-top: 0.6rem;
+        }
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem;
+            border-bottom: 1px solid var(--line);
+        }
+        .link-item:last-child { border-bottom: none; }
+        .link-text {
+            flex: 1;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--ink);
+            word-break: break-all;
+            background: #fdfaf4;
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+        }
+        .copy-btn {
+            padding: 0.4rem 0.7rem;
+            font-size: 0.75rem;
+        }
+        .empty {
+            color: var(--ink-soft);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+        }
+        .counter {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            margin-bottom: 0.5rem;
+            text-align: right;
+        }
+        .hint {
+            font-size: 0.78rem;
+            color: var(--ink-soft);
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+        .copied-toast {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--ink);
+            color: var(--cream);
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        .copied-toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <h1>Gerador de Links</h1>
+            <p>Festa Dona Maria — 60 Anos</p>
+        </header>
+
+        <div class="card">
+            <label>URL base do convite</label>
+            <input type="text" id="baseUrl" class="base-url"
+                   value="https://aniversario60anos.vercel.app/" />
+            <p class="hint">Mude aqui se o site estiver em outro domínio</p>
+        </div>
+
+        <div class="card">
+            <label>Nomes (um por linha)</label>
+            <div class="row">
+                <textarea id="namesInput" placeholder="Maria Silva&#10;João Santos&#10;Fabrycio Bermudes"></textarea>
+                <button onclick="gerarLinks()" style="align-self: flex-start;">Gerar</button>
+            </div>
+            <p class="hint">Pode digitar, colar do Excel, ou copiar de uma lista. Um nome por linha.</p>
+        </div>
+
+        <div class="card">
+            <div class="counter" id="counter">0 links gerados</div>
+            <div class="row" style="margin-bottom: 0.8rem;">
+                <button onclick="copiarTodos()" class="gold">📋 Copiar todos</button>
+                <button onclick="baixarTxt()">💾 Baixar .txt</button>
+                <button onclick="limpar()" style="background: #888;">🗑️ Limpar</button>
+            </div>
+            <div class="links-list" id="linksList">
+                <div class="empty">Os links aparecerão aqui</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="copied-toast" id="toast">Copiado!</div>
+
+    <script>
+        const baseUrlInput = document.getElementById('baseUrl');
+        const namesInput = document.getElementById('namesInput');
+        const linksList = document.getElementById('linksList');
+        const counter = document.getElementById('counter');
+        const toast = document.getElementById('toast');
+        let currentLinks = [];
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 1500);
+        }
+
+        function buildLink(nome) {
+            const base = baseUrlInput.value.trim().replace(/\/?$/, '/');
+            return base + '?nome=' + encodeURIComponent(nome.trim());
+        }
+
+        function gerarLinks() {
+            const nomes = namesInput.value
+                .split('\n')
+                .map(n => n.trim())
+                .filter(n => n.length > 0);
+
+            if (nomes.length === 0) {
+                linksList.innerHTML = '<div class="empty">Digite pelo menos um nome</div>';
+                counter.textContent = '0 links gerados';
+                currentLinks = [];
+                return;
+            }
+
+            currentLinks = nomes.map(buildLink);
+            render();
+            showToast(`${currentLinks.length} links gerados`);
+        }
+
+        function render() {
+            if (currentLinks.length === 0) {
+                linksList.innerHTML = '<div class="empty">Os links aparecerão aqui</div>';
+                counter.textContent = '0 links gerados';
+                return;
+            }
+
+            counter.textContent = `${currentLinks.length} link${currentLinks.length > 1 ? 's' : ''} gerado${currentLinks.length > 1 ? 's' : ''}`;
+            linksList.innerHTML = currentLinks.map((link, i) => `
+                <div class="link-item">
+                    <span class="link-text">${link}</span>
+                    <button class="copy-btn" onclick="copiarUm(${i})">Copiar</button>
+                </div>
+            `).join('');
+        }
+
+        async function copiarUm(idx) {
+            try {
+                await navigator.clipboard.writeText(currentLinks[idx]);
+                showToast('Link copiado!');
+            } catch (e) {
+                showToast('Erro ao copiar');
+            }
+        }
+
+        async function copiarTodos() {
+            if (currentLinks.length === 0) {
+                showToast('Gere os links primeiro');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(currentLinks.join('\n'));
+                showToast('Todos copiados!');
+            } catch (e) {
+                showToast('Erro ao copiar');
+            }
+        }
+
+        function baixarTxt() {
+            if (currentLinks.length === 0) {
+                showToast('Gere os links primeiro');
+                return;
+            }
+            const blob = new Blob([currentLinks.join('\n')], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'links_convite.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function limpar() {
+            currentLinks = [];
+            render();
+            showToast('Limpo');
+        }
+
+        // Gera automaticamente quando cola lista no textarea
+        namesInput.addEventListener('paste', () => {
+            setTimeout(gerarLinks, 50);
+        });
+    </script>
+</body>
+</html>
