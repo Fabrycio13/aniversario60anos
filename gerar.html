@@ -108,25 +108,48 @@
         .link-item {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.6rem;
+            gap: 0.4rem;
+            padding: 0.5rem 0.6rem;
             border-bottom: 1px solid var(--line);
         }
         .link-item:last-child { border-bottom: none; }
-        .link-text {
+        .link-nome {
+            min-width: 120px;
+            font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--ink);
+        }
+        .link-url {
             flex: 1;
             font-family: monospace;
-            font-size: 0.8rem;
-            color: var(--ink);
+            font-size: 0.72rem;
+            color: var(--ink-soft);
             word-break: break-all;
             background: #fdfaf4;
-            padding: 0.4rem 0.6rem;
+            padding: 0.35rem 0.5rem;
             border-radius: 6px;
             border: 1px solid var(--line);
         }
         .copy-btn {
-            padding: 0.4rem 0.7rem;
-            font-size: 0.75rem;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+        .del-btn {
+            padding: 0.35rem 0.5rem;
+            font-size: 0.8rem;
+            background: none;
+            color: #c0392b;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+        .del-btn:hover {
+            opacity: 1;
+            background: #fce8e6;
         }
         .empty {
             color: var(--ink-soft);
@@ -178,23 +201,22 @@
         </div>
 
         <div class="card">
-            <label>Nomes (um por linha)</label>
+            <label>Adicionar nomes (um por linha)</label>
             <div class="row">
                 <textarea id="namesInput" placeholder="Maria Silva&#10;João Santos&#10;Fabrycio Bermudes"></textarea>
-                <button onclick="gerarLinks()" style="align-self: flex-start;">Gerar</button>
+                <button onclick="adicionar()" style="align-self: flex-start;">Adicionar</button>
             </div>
-            <p class="hint">Pode digitar, colar do Excel, ou copiar de uma lista. Um nome por linha.</p>
+            <p class="hint">Digite ou cole nomes novos. Se um nome já existir na lista, ele é ignorado.</p>
         </div>
 
         <div class="card">
-            <div class="counter" id="counter">0 links gerados</div>
+            <div class="counter" id="counter">0 convidados</div>
             <div class="row" style="margin-bottom: 0.8rem;">
                 <button onclick="copiarTodos()" class="gold">📋 Copiar todos</button>
-                <button onclick="baixarTxt()">💾 Baixar .txt</button>
-                <button onclick="limpar()" style="background: #888;">🗑️ Limpar</button>
+                <button onclick="limpar()" style="background: #888;">🗑️ Limpar tudo</button>
             </div>
             <div class="links-list" id="linksList">
-                <div class="empty">Os links aparecerão aqui</div>
+                <div class="empty">Nenhum convidado ainda. Adicione nomes acima.</div>
             </div>
         </div>
     </div>
@@ -213,131 +235,143 @@
         const linksList = document.getElementById('linksList');
         const counter = document.getElementById('counter');
         const toast = document.getElementById('toast');
-        let currentLinks = [];
+        let convidados = [];
 
-        // Supabase
         const SB_URL = 'https://qhkcilqktcdevkkysovp.supabase.co';
         const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoa2NpbHFrdGNkZXZra3lzb3ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3NTk5NzksImV4cCI6MjEwMDMzNTk3OX0.gGg83qvinqHsZkdRacGYVRheCwawWeUKAHCiEpni9LU';
 
-        function sbHeaders() {
-            return {
-                'Content-Type': 'application/json',
-                'apikey': SB_KEY,
-                'Authorization': 'Bearer ' + SB_KEY,
-                'Prefer': 'return=minimal'
-            };
-        }
+        function sbH() { return {
+            'Content-Type': 'application/json',
+            'apikey': SB_KEY,
+            'Authorization': 'Bearer ' + SB_KEY
+        };}
 
-        function showToast(msg) {
-            toast.textContent = msg;
+        function toastShow(m) {
+            toast.textContent = m;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 1500);
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        function buildLink(nome) {
+        function buildLink(n) {
             const base = baseUrlInput.value.trim().replace(/\/?$/, '/');
-            return base + '?nome=' + encodeURIComponent(nome.trim());
+            return base + '?nome=' + encodeURIComponent(n.trim());
         }
 
-        async function gerarLinks() {
-            const nomes = namesInput.value
-                .split('\n')
-                .map(n => n.trim())
-                .filter(n => n.length > 0);
-
-            if (nomes.length === 0) {
-                linksList.innerHTML = '<div class="empty">Digite pelo menos um nome</div>';
-                counter.textContent = '0 links gerados';
-                currentLinks = [];
-                render();
-                return;
-            }
-
-            // Limpa tabela e salva tudo de novo
-            await fetch(SB_URL + '/rest/v1/links_gerados?id=neq.0', {
-                method: 'DELETE',
-                headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
-            }).catch(() => {});
-
-            for (const nome of nomes) {
-                await fetch(SB_URL + '/rest/v1/links_gerados', {
-                    method: 'POST',
-                    headers: sbHeaders(),
-                    body: JSON.stringify({ nome: nome, link: buildLink(nome) })
-                }).catch(() => {});
-            }
-
-            currentLinks = nomes.map(buildLink);
-            render();
-            showToast(`${currentLinks.length} links gerados`);
-        }
-
-        async function carregarLinks() {
+        // ---- CARREGAR ----
+        async function carregar() {
             try {
-                const res = await fetch(SB_URL + '/rest/v1/links_gerados?select=*&order=id.asc', {
+                const r = await fetch(SB_URL + '/rest/v1/links_gerados?select=*&order=nome.asc', {
                     headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
                 });
-                if (!res.ok) return;
-                const dados = await res.json();
-                if (dados.length === 0) return;
-                namesInput.value = dados.map(d => d.nome).join('\n');
-                currentLinks = dados.map(d => d.link);
+                if (!r.ok) return;
+                convidados = await r.json();
                 render();
             } catch (e) {}
         }
 
+        // ---- RENDER ----
         function render() {
-            if (currentLinks.length === 0) {
-                linksList.innerHTML = '<div class="empty">Os links aparecerão aqui</div>';
-                counter.textContent = '0 links gerados';
+            if (convidados.length === 0) {
+                linksList.innerHTML = '<div class="empty">Nenhum convidado ainda. Adicione nomes acima.</div>';
+                counter.textContent = '0 convidados';
                 return;
             }
-            counter.textContent = `${currentLinks.length} link${currentLinks.length > 1 ? 's' : ''} gerado${currentLinks.length > 1 ? 's' : ''}`;
-            linksList.innerHTML = currentLinks.map((link, i) => `
+            counter.textContent = `${convidados.length} convidado${convidados.length > 1 ? 's' : ''}`;
+            linksList.innerHTML = convidados.map((c, i) => `
                 <div class="link-item">
-                    <span class="link-text">${link}</span>
-                    <button class="copy-btn" onclick="copiarUm(${i})">Copiar</button>
+                    <span class="link-nome">${c.nome}</span>
+                    <span class="link-url">${c.link}</span>
+                    <button class="copy-btn" onclick="copiar(${c.id})">Copiar</button>
+                    <button class="del-btn" onclick="deletar(${c.id})">✕</button>
                 </div>
             `).join('');
         }
 
-        async function copiarUm(idx) {
-            try { await navigator.clipboard.writeText(currentLinks[idx]); showToast('Link copiado!'); }
-            catch (e) { showToast('Erro ao copiar'); }
+        // ---- ADICIONAR ----
+        async function adicionar() {
+            const nomes = namesInput.value.split('\n').map(n => n.trim()).filter(n => n);
+            if (nomes.length === 0) { toastShow('Digite pelo menos um nome'); return; }
+
+            // Verifica duplicatas
+            const existentes = new Set(convidados.map(c => c.nome.toLowerCase().trim()));
+            const novos = [];
+            const ignorados = [];
+
+            for (const n of nomes) {
+                if (existentes.has(n.toLowerCase())) {
+                    ignorados.push(n);
+                } else {
+                    novos.push(n);
+                    existentes.add(n.toLowerCase());
+                }
+            }
+
+            if (ignorados.length > 0) {
+                toastShow(`${ignorados.length} já existente${ignorados.length > 1 ? 's' : ''}: ${ignorados.join(', ')}`);
+            }
+
+            if (novos.length === 0) return;
+
+            for (const nome of novos) {
+                await fetch(SB_URL + '/rest/v1/links_gerados', {
+                    method: 'POST',
+                    headers: sbH(),
+                    body: JSON.stringify({ nome: nome, link: buildLink(nome) })
+                }).catch(() => {});
+            }
+
+            namesInput.value = '';
+            await carregar();
+            toastShow(`${novos.length} adicionado${novos.length > 1 ? 's' : ''}!`);
+        }
+
+        // ---- COPIAR ----
+        async function copiar(id) {
+            const c = convidados.find(x => x.id === id);
+            if (!c) return;
+            try {
+                await navigator.clipboard.writeText(c.link);
+                toastShow('Link copiado!');
+            } catch (e) {
+                toastShow('Erro ao copiar');
+            }
         }
 
         async function copiarTodos() {
-            if (currentLinks.length === 0) { showToast('Gere os links primeiro'); return; }
-            try { await navigator.clipboard.writeText(currentLinks.join('\n')); showToast('Todos copiados!'); }
-            catch (e) { showToast('Erro ao copiar'); }
+            if (convidados.length === 0) { toastShow('Nenhum convidado'); return; }
+            try {
+                await navigator.clipboard.writeText(convidados.map(c => c.link).join('\n'));
+                toastShow('Todos copiados!');
+            } catch (e) {
+                toastShow('Erro ao copiar');
+            }
         }
 
-        function baixarTxt() {
-            if (currentLinks.length === 0) { showToast('Gere os links primeiro'); return; }
-            const blob = new Blob([currentLinks.join('\n')], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'links_convite.txt';
-            a.click();
-            URL.revokeObjectURL(a.href);
+        // ---- DELETAR ----
+        async function deletar(id) {
+            await fetch(SB_URL + '/rest/v1/links_gerados?id=eq.' + id, {
+                method: 'DELETE',
+                headers: sbH()
+            }).catch(() => {});
+            await carregar();
+            toastShow('Removido');
         }
 
+        // ---- LIMPAR ----
         async function limpar() {
+            const ok = confirm('Limpar todos os convidados?');
+            if (!ok) return;
             await fetch(SB_URL + '/rest/v1/links_gerados?id=neq.0', {
                 method: 'DELETE',
-                headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+                headers: sbH()
             }).catch(() => {});
-            currentLinks = [];
-            namesInput.value = '';
-            render();
-            showToast('Limpo');
+            await carregar();
+            toastShow('Tudo limpo');
         }
 
-        // Gera ao colar
-        namesInput.addEventListener('paste', () => setTimeout(gerarLinks, 100));
-
-        // Carrega do Supabase ao abrir a página
-        carregarLinks();
+        // ---- EVENTOS ----
+        namesInput.addEventListener('paste', () => setTimeout(adicionar, 100));
+        carregar();
     </script>
 </body>
 </html>
