@@ -24,7 +24,7 @@
  *  Ou crie uma planilha manualmente e cole o ID aqui.
  *  O ID está na URL: https://docs.google.com/spreadsheets/d/SEU_ID/edit
  */
-const SHEET_ID = '';
+const SHEET_ID = '1uZyo5D8UEy6m_x9FeQN3xvOkJqXgkAwEN1bIqAh74k4';
 
 /** Nome da aba/página dentro da planilha */
 const SHEET_NAME = 'Confirmacoes';
