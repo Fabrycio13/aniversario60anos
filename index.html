@@ -28,9 +28,17 @@
             overflow: hidden;
         }
         .hero-banner {
-            width: 100%;
+            width: 40%;
             height: auto;
+            object-fit: cover;
             display: block;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .hero-banner { width: 65%; }
+        }
+        @media (max-width: 480px) {
+            .hero-banner { width: 85%; }
         }
 
         .hero h1 {
