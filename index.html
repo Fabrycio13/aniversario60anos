@@ -1309,10 +1309,33 @@
                 }
 
                 const nomeField = document.getElementById('nome');
-                nomeField.value = nomeParam.replace(/\+/g, ' ');
-                nomeField.readOnly = true;
-                nomeField.style.background = '#FAF6F0';
-                nomeField.style.cursor = 'default';
+                const nome = nomeParam.replace(/\+/g, ' ');
+
+                // Verifica se o nome existe no banco (links_gerados)
+                fetch(SUPABASE_URL + '/rest/v1/links_gerados?nome=eq.' + encodeURIComponent(nome) + '&select=id', {
+                    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+                })
+                .then(r => r.json())
+                .then(dados => {
+                    if (!dados || dados.length === 0) {
+                        formAtivo.style.display = 'none';
+                        acessoNegado.style.display = 'block';
+                        acessoNegado.querySelector('h2').textContent = 'Link inválido ou expirado';
+                        acessoNegado.querySelector('p').innerHTML = 'Este link não é mais válido.<br />Entre em contato com a aniversariante para um novo link.';
+                        return;
+                    }
+                    nomeField.value = nome;
+                    nomeField.readOnly = true;
+                    nomeField.style.background = '#FAF6F0';
+                    nomeField.style.cursor = 'default';
+                })
+                .catch(() => {
+                    // Se falhar a consulta, libera mesmo assim (fallback)
+                    nomeField.value = nome;
+                    nomeField.readOnly = true;
+                    nomeField.style.background = '#FAF6F0';
+                    nomeField.style.cursor = 'default';
+                });
             }
             prefillFromURL();
 
