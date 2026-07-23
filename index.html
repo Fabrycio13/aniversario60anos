@@ -3,164 +3,666 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Festa Dona Maria — Confirme sua Presença</title>
+    <title>60 Anos de Dona Maria — Convite Especial</title>
+    
+    <!-- SEO & Meta Tags -->
+    <meta name="description" content="Você é nosso convidado especial para celebrar os 60 anos da Dona Maria! Confirme sua presença." />
+    <meta property="og:title" content="Festa 60 Anos — Dona Maria" />
+    <meta property="og:description" content="12 de Setembro de 2026 • Venha celebrar esse momento inesquecível conosco!" />
+    <meta property="og:image" content="banner.webp" />
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
     <style>
-        /* ===== RESET & BASE ===== */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #ecdcc0;
-            color: #3d2c1f;
-            line-height: 1.6;
-            min-height: 100vh;
+        :root {
+            --bg-base: #FAF6F0;
+            --bg-card: #FFFFFF;
+            --navy-royal: #0F1F38;
+            --gold-primary: #C59E4E;
+            --gold-vivid: #D4AF37;
+            --gold-dark: #8C6D33;
+            --gold-light: #E8D5B0;
+            --gold-shimmer: #F5E5C9;
+            --gold-gradient: linear-gradient(135deg, #EAD096 0%, #C59E4E 50%, #906F2F 100%);
+            --champagne-card: linear-gradient(135deg, #FFFDF9 0%, #FAF4E8 50%, #F5E8D0 100%);
+            --text-dark: #2A2219;
+            --text-muted: #5C5247;
+            --text-light: #8A7E71;
+            --border-gold: rgba(197, 158, 78, 0.35);
+            --border-gold-strong: rgba(197, 158, 78, 0.75);
+            --shadow-luxury: 0 16px 40px -12px rgba(197, 158, 78, 0.25);
+            --shadow-card: 0 10px 30px -10px rgba(42, 34, 25, 0.06);
+            --radius-main: 18px;
         }
 
-        /* ===== HERO ===== */
-        .hero {
-            background: #ecdcc0;
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-base);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-base);
+            color: var(--text-dark);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Canvas de Partículas Brilhantes e Vivas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.95;
+        }
+
+        .relative-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== BARRA DE TOPO ===== */
+        .top-eyebrow-bar {
             text-align: center;
-            padding: 3rem 1rem 2.5rem;
+            padding: 1.5rem 1rem 0.5rem;
+        }
+
+        .eyebrow-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 1.4rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-gold);
+            border-radius: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(197, 158, 78, 0.15);
+        }
+
+        /* ===== HERO CONTAINER ESTILO CHAMPAGNE DOURADO ===== */
+        .hero-section {
+            padding: 1rem 1.25rem 2.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-card-champagne {
+            max-width: 680px;
+            width: 100%;
+            background: var(--champagne-card);
+            border-radius: 20px;
+            padding: 1.2rem 1.2rem 2.2rem;
+            border: 1.5px solid var(--border-gold-strong);
+            box-shadow: var(--shadow-luxury);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-card-champagne::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: var(--gold-gradient);
+        }
+
+        .banner-blended {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 14px;
+            mix-blend-mode: multiply;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-text-block {
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        .divider-ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 0 auto 1.2rem;
+            max-width: 280px;
+        }
+        .divider-ornament::before,
+        .divider-ornament::after {
+            content: '';
+            height: 1px;
+            flex: 1;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+        }
+        .divider-ornament span {
+            color: var(--gold-primary);
+            font-size: 0.95rem;
+        }
+
+        .hero-poem {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.2rem, 3.5vw, 1.4rem);
+            color: var(--navy-royal);
+            max-width: 520px;
+            margin: 0 auto 1rem;
+            line-height: 1.65;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .hero-invite-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin: 0 auto;
+            line-height: 1.65;
+        }
+
+        /* ===== CONTADOR REGRESSIVO DOURADO CHAMPAGNE ===== */
+        .countdown-container {
+            max-width: 680px;
+            margin: 0 auto 2.5rem;
+            padding: 0 1.25rem;
+        }
+
+        .countdown-card {
+            background: var(--champagne-card);
+            border-radius: var(--radius-main);
+            padding: 1.8rem 1.25rem;
+            color: var(--text-dark);
+            text-align: center;
+            box-shadow: var(--shadow-luxury);
+            border: 1.5px solid var(--border-gold-strong);
             position: relative;
             overflow: hidden;
         }
-        .hero::before {
-            content: '🌸  🌿  🌷  🌻  🌾';
+
+        .countdown-card::before {
+            content: '';
             position: absolute;
-            top: 12px;
-            left: 0;
-            right: 0;
-            font-size: 1.4rem;
-            letter-spacing: 1.5rem;
-            text-align: center;
-            opacity: 0.45;
-            pointer-events: none;
-        }
-        .hero::after {
-            content: '🌾  🌻  🌷  🌿  🌸';
-            position: absolute;
-            bottom: 12px;
-            left: 0;
-            right: 0;
-            font-size: 1.4rem;
-            letter-spacing: 1.5rem;
-            text-align: center;
-            opacity: 0.45;
-            pointer-events: none;
-        }
-        .hero-banner {
-            width: 100%;
-            max-width: 720px;
-            height: auto;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto;
-            border-radius: 0;
-            box-shadow: none;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: var(--gold-gradient);
         }
 
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 5.5vw, 3.2rem);
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            color: #3d2c1f;
-            margin-bottom: 0.3rem;
-        }
-        .hero .subtitle {
-            font-size: clamp(0.95rem, 2vw, 1.15rem);
-            font-weight: 400;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: #6b5a4a;
-        }
-        .hero .divider {
-            width: 60px;
-            height: 2px;
-            background: #b8a894;
-            margin: 1rem auto;
-        }
-        .hero .date {
-            font-size: 1rem;
-            font-weight: 300;
-            letter-spacing: 0.3px;
-            color: #5a4a3a;
-        }
-        .hero .date strong {
-            font-weight: 600;
-            color: #3d2c1f;
+        .countdown-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.25em;
+            color: var(--gold-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
         }
 
-        /* ===== DETAILS BAR ===== */
-        .details-bar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.8rem;
-            background: transparent;
-            backdrop-filter: blur(8px);
-            padding: 1.2rem 1.5rem;
-            box-shadow: 0 1px 8px rgba(0,0,0,0.04);
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-        .details-bar .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.92rem;
-            color: #5a4a3a;
-        }
-        .details-bar .detail-icon { font-size: 1.2rem; }
-
-        /* ===== MAIN CARD ===== */
-        .container {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 3.5rem;
-        }
-
-        .intro-text {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .intro-text p {
-            font-size: 1rem;
-            color: #5a4a3a;
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.85rem;
             max-width: 480px;
             margin: 0 auto;
         }
-        .intro-text .floral {
-            font-size: 1.3rem;
-            letter-spacing: 0.5rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.5;
+
+        .time-box {
+            background: #FFFFFF;
+            border: 1px solid var(--border-gold-strong);
+            border-radius: 14px;
+            padding: 0.85rem 0.25rem;
+            box-shadow: 0 4px 12px rgba(197, 158, 78, 0.12);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .time-box:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 8px 20px rgba(197, 158, 78, 0.2);
         }
 
-        .rsvp-card {
-            background: #fffdfa;
+        .time-value {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+            font-weight: 700;
+            color: var(--navy-royal);
+            line-height: 1.1;
+        }
+
+        .time-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gold-dark);
+            margin-top: 0.3rem;
+        }
+
+        /* ===== CONTAINER PRINCIPAL ===== */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.25rem 4rem;
+        }
+
+        /* ===== DETALHES DO EVENTO ===== */
+        .section-header {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .section-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.25em;
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.3rem;
+            color: var(--navy-royal);
+            font-weight: 600;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .detail-card {
+            background: var(--champagne-card);
+            border-radius: var(--radius-main);
+            padding: 1.6rem 1.25rem;
+            text-align: center;
+            border: 1.5px solid var(--border-gold-strong);
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-luxury);
+            border-color: var(--gold-primary);
+        }
+
+        .detail-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-gold-strong);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--gold-dark);
+            box-shadow: 0 4px 10px rgba(197, 158, 78, 0.12);
+        }
+
+        .detail-card-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .detail-card-value {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--navy-royal);
+            line-height: 1.4;
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.48rem 1rem;
+            background: #FFFFFF;
+            border: 1px solid var(--border-gold-strong);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gold-dark);
+            text-decoration: none;
+            transition: all 0.25s;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(197, 158, 78, 0.08);
+        }
+        .detail-action-btn:hover {
+            background: var(--navy-royal);
+            color: var(--gold-light);
+            border-color: var(--navy-royal);
+        }
+
+        /* CARDS INFORMATIVOS — EM LINHAS INDIVIDUAIS DE LARGURA TOTAL (MAIOR DESTAQUE) */
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card-box {
+            background: var(--champagne-card);
+            border-radius: var(--radius-main);
+            padding: 1.6rem 1.6rem;
+            border: 1.5px solid var(--border-gold-strong);
+            border-left: 5px solid var(--gold-primary);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-card-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-luxury);
+        }
+
+        .info-icon {
+            font-size: 2.2rem;
+            line-height: 1;
+            flex-shrink: 0;
+            background: #FFFFFF;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-gold-strong);
+            box-shadow: 0 4px 10px rgba(197, 158, 78, 0.12);
+        }
+
+        .info-content h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--navy-royal);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+
+        .info-content p {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ===== FORMULÁRIO RSVP ===== */
+        .rsvp-section {
+            background: var(--champagne-card);
             border-radius: 20px;
             padding: 2.5rem 2rem;
-            box-shadow: 0 6px 28px rgba(61, 44, 31, 0.06);
-            border: 1px solid rgba(184, 168, 148, 0.2);
+            border: 1.5px solid var(--border-gold-strong);
+            box-shadow: var(--shadow-luxury);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rsvp-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: var(--gold-gradient);
+        }
+
+        .form-group {
+            margin-bottom: 1.6rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--navy-royal);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .form-group label .required {
+            color: #C0392B;
+            margin-left: 2px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.9rem 1.1rem;
+            border: 1px solid var(--border-gold-strong);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #FFFFFF;
+            color: var(--text-dark);
+            transition: all 0.25s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 0 4px rgba(197, 158, 78, 0.18);
+            background: #FFFFFF;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 85px;
+        }
+
+        .radio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 0.4rem;
+        }
+
+        .radio-card {
             position: relative;
         }
-        .rsvp-card::before,
-        .rsvp-card::after {
-            content: '❀';
-            position: absolute;
-            font-size: 1.2rem;
-            opacity: 0.15;
-            color: #7a9e7e;
-        }
-        .rsvp-card::before { top: 12px; left: 16px; }
-        .rsvp-card::after { bottom: 12px; right: 16px; }
 
-        /* ===== EXPIRADO ===== */
+        .radio-card input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .radio-card label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.95rem 1rem;
+            border: 1px solid var(--border-gold-strong);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.92rem;
+            transition: all 0.25s;
+            background: #FFFFFF;
+            color: var(--text-dark);
+            margin-bottom: 0;
+            text-transform: none;
+            letter-spacing: 0;
+            text-align: center;
+        }
+
+        .radio-card input:checked + label {
+            border-color: var(--navy-royal);
+            background: var(--navy-royal);
+            color: var(--gold-shimmer);
+            box-shadow: 0 6px 18px -4px rgba(15, 31, 56, 0.25);
+        }
+
+        .radio-card label:hover {
+            border-color: var(--gold-primary);
+        }
+
+        .dependentes-section {
+            display: none;
+            animation: fadeSlideIn 0.35s ease;
+        }
+        .dependentes-section.visible {
+            display: block;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dependente-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding: 0.8rem 1rem;
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid var(--border-gold-strong);
+        }
+
+        .dependente-row input {
+            flex: 1;
+            padding: 0.65rem 0.9rem;
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #FAF6F0;
+        }
+
+        .dependente-row .dep-number {
+            min-width: 1.8rem;
+            font-weight: 700;
+            color: var(--gold-dark);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1.1rem 2rem;
+            background: var(--gold-gradient);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px -5px rgba(197, 158, 78, 0.4);
+            margin-top: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -4px rgba(197, 158, 78, 0.55);
+        }
+
+        .btn-submit:active { transform: translateY(0); }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .resubmit-info {
+            margin-top: 1.25rem;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+            border: 1px dashed var(--border-gold-strong);
+        }
+
+        .form-message {
+            display: none;
+            padding: 1.1rem 1.4rem;
+            border-radius: 12px;
+            margin-bottom: 1.6rem;
+            font-weight: 600;
+            text-align: center;
+            animation: fadeSlideIn 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .form-message.success {
+            display: block;
+            background: #F0F7F4;
+            color: #1E513B;
+            border: 1.5px solid #A8D5BA;
+        }
+        .form-message.error {
+            display: block;
+            background: #FDF2F2;
+            color: #9B1C1C;
+            border: 1.5px solid #F8B4B4;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #FFFFFF;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         .expirado-box {
             display: none;
             text-align: center;
@@ -170,410 +672,284 @@
             display: block;
             animation: fadeSlideIn 0.5s ease;
         }
-        .expirado-box .expirado-icon {
+        .expirado-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-        .expirado-box h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 500;
+        .expirado-box h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--navy-royal);
             margin-bottom: 0.5rem;
-        }
-        .expirado-box p {
-            color: #6b5a4a;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        /* ===== FORM ===== */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            font-size: 0.88rem;
-            color: #3d2c1f;
-            margin-bottom: 0.35rem;
-        }
-        .form-group label .required {
-            color: #c0392b;
-            margin-left: 2px;
-        }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1.5px solid #e0d6cc;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            background: #fefcf9;
-            color: #3d2c1f;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #7a9e7e;
-            box-shadow: 0 0 0 3px rgba(122, 158, 126, 0.12);
-        }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 70px;
-        }
-
-        /* Radio group */
-        .radio-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.3rem;
-        }
-        .radio-option {
-            flex: 1;
-            position: relative;
-        }
-        .radio-option input {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-        .radio-option label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.7rem 1rem;
-            border: 1.5px solid #e0d6cc;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            background: #fefcf9;
-            margin-bottom: 0;
-        }
-        .radio-option input:checked + label {
-            border-color: #7a9e7e;
-            background: #f0f7ef;
-            color: #2d4a2e;
-        }
-        .radio-option label:hover {
-            border-color: #a8c4ab;
-        }
-        .radio-option input:focus + label {
-            box-shadow: 0 0 0 3px rgba(122, 158, 126, 0.12);
-        }
-
-        /* Dependentes conditional */
-        .dependentes-section {
-            display: none;
-            animation: fadeSlideIn 0.3s ease;
-        }
-        .dependentes-section.visible {
-            display: block;
-        }
-
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dependente-row {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-            margin-bottom: 0.6rem;
-            padding: 0.7rem;
-            background: #faf7f4;
-            border-radius: 10px;
-            border: 1px solid #ede6de;
-        }
-        .dependente-row input {
-            flex: 1;
-            padding: 0.6rem 0.8rem;
-            border: 1.5px solid #e0d6cc;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            background: #fefcf9;
-        }
-        .dependente-row input:focus {
-            outline: none;
-            border-color: #7a9e7e;
-        }
-        .dependente-row .dep-number {
-            min-width: 1.5rem;
-            font-weight: 500;
-            color: #6b5a4a;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        /* Submit button */
-        .btn-submit {
-            width: 100%;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #7a9e7e, #5f8363);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.2s;
-            margin-top: 0.5rem;
-        }
-        .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(122, 158, 126, 0.35);
-        }
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ===== MESSAGES ===== */
-        .form-message {
-            display: none;
-            padding: 1rem 1.2rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-            text-align: center;
-            animation: fadeSlideIn 0.2s ease;
-        }
-        .form-message.success {
-            display: block;
-            background: #eaf5ea;
-            color: #3a7a3e;
-            border: 1px solid #b8dbb8;
-        }
-        .form-message.error {
-            display: block;
-            background: #fce8e6;
-            color: #b33a2a;
-            border: 1px solid #f5c6c2;
-        }
-        .form-message.loading {
-            display: block;
-            background: #fef5e6;
-            color: #8a6a2a;
-            border: 1px solid #f5deb2;
-        }
-
-        .form-message.info {
-            display: block;
-            background: #e8f0fa;
-            color: #3a5a7a;
-            border: 1px solid #b8cce0;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(138, 106, 42, 0.2);
-            border-top-color: #8a6a2a;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            vertical-align: middle;
-            margin-right: 0.5rem;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ===== FLORAL DIVIDER ===== */
-        .section-divider {
-            text-align: center;
-            font-size: 1rem;
-            letter-spacing: 0.6rem;
-            color: #b8a894;
-            margin: 1.5rem 0;
-            opacity: 0.4;
-        }
-
-        /* ===== CONFIRMADOS ===== */
-        .confirmed-section {
-            margin-top: 2rem;
-            text-align: center;
-        }
-        .confirmed-section p {
-            font-size: 0.88rem;
-            color: #8a7a6a;
-        }
-
-        /* ===== INFO RE-SUBMIT ===== */
-        .resubmit-info {
-            margin-top: 1rem;
-            padding: 0.8rem 1rem;
-            background: #faf7f4;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            color: #8a7a6a;
-            text-align: center;
-            border: 1px solid #ede6de;
         }
 
         /* ===== FOOTER ===== */
         .footer {
             text-align: center;
-            padding: 2rem 1.5rem;
-            color: #8a7a6a;
-            font-size: 0.82rem;
-            border-top: 1px solid #e8ddd0;
+            padding: 3rem 1.25rem 2.5rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        .footer-brand {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: var(--gold-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        /* ===== BOTÃO FLUTUANTE MOBILE ===== */
+        .floating-rsvp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            background: var(--navy-royal);
+            color: var(--gold-shimmer);
+            padding: 0.8rem 1.4rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(15, 31, 56, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .floating-rsvp-btn:hover {
+            transform: scale(1.05);
+            background: var(--gold-primary);
+            color: #FFFFFF;
         }
 
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 480px) {
-            .hero { padding: 2.5rem 1rem 2rem; }
-            .hero-foto { width: 120px; height: 120px; }
-            .rsvp-card { padding: 1.5rem 1.2rem; }
-            .radio-group { flex-direction: column; gap: 0.5rem; }
-            .details-bar { gap: 0.8rem; padding: 0.8rem 1rem; }
-            .details-bar .detail-item { font-size: 0.82rem; }
-            .dependente-row { flex-wrap: wrap; }
+        @media (max-width: 600px) {
+            .hero-card-champagne { padding: 1rem 0.8rem 1.8rem; }
+            .radio-grid { grid-template-columns: 1fr; gap: 0.6rem; }
+            .countdown-grid { gap: 0.4rem; }
+            .time-box { padding: 0.6rem 0.2rem; }
+            .time-value { font-size: 1.3rem; }
+            .details-grid { grid-template-columns: 1fr; }
+            .info-card-box { padding: 1.2rem 1rem; }
+            .rsvp-section { padding: 1.8rem 1.25rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-        <img src="banner.webp"
-             alt="Festa Dona Maria - 60 Anos"
-             class="hero-banner" />
-    </section>
+    <!-- Canvas de Partículas Douradas Brilhantes -->
+    <canvas id="particle-canvas"></canvas>
 
-    <!-- ===== DETALHES ===== -->
-    <div class="details-bar">
-    <span class="detail-item">
-        <span class="detail-icon">📅</span>
-        12 de Setembro de 2026 (Sábado)
-    </span>
-    <span class="detail-item">
-        <span class="detail-icon">⏰</span>
-        13h às 20h
-    </span>
-    <span class="detail-item">
-        <span class="detail-icon">📍</span>
-        Rua Caraibuna, 11 — Taquara
-    </span>
-    <span class="detail-item">
-        <span class="detail-icon">💐</span>
-        Confirme até 01/09
-    </span>
-    </div>
-
-    <!-- ===== INFO ADICIONAL ===== -->
-    <div class="container" style="padding-top: 1.5rem; padding-bottom: 0;">
-    <div class="rsvp-card" style="padding: 1.2rem 1.5rem; text-align: center;">
-        <p style="color: #5a4a3a; font-size: 0.9rem; margin: 0;">
-            🏊 <strong>O local tem piscina!</strong> Traga traje de banho e toalha.<br />
-            🍷 Quem quiser consumir bebida alcoólica, pedimos a gentileza de trazer a sua.
-        </p>
-    </div>
-    </div>
-
-    <!-- ===== FORMULÁRIO ===== -->
-    <div class="container">
-        <div class="intro-text">
-            <div class="floral">✿ ❀ ✿</div>
-            <p>
-                Sua presença vai tornar esse dia ainda mais especial!
-                Confirme abaixo para que possamos preparar tudo com carinho.
-            </p>
+    <div class="relative-wrapper">
+        
+        <!-- Bar de Topo Decorativo -->
+        <div class="top-eyebrow-bar">
+            <div class="eyebrow-pill">
+                <span>✦</span> Convite Especial de Aniversário <span>✦</span>
+            </div>
         </div>
 
-        <div class="rsvp-card">
-            <!-- Mensagens de feedback -->
-            <div id="form-message" class="form-message"></div>
+        <!-- ===== HERO CONTAINER ESTILO CHAMPAGNE DOURADO ===== -->
+        <section class="hero-section">
+            <div class="hero-card-champagne">
+                <img src="banner.webp"
+                     alt="Convite Dona Maria - 60 Anos"
+                     class="banner-blended" />
 
-            <!-- Formulário ativo -->
-            <div id="form-ativo">
-                <form id="rsvp-form" novalidate>
-                    <!-- Nome -->
-                    <div class="form-group">
-                        <label for="nome">Seu nome completo <span class="required">*</span></label>
-                        <input type="text" id="nome" name="nome"
-                               placeholder="Ex: Maria Silva" required autocomplete="name" />
+                <div class="hero-text-block">
+                    <div class="divider-ornament">
+                        <span>❧</span>
                     </div>
 
-                    <!-- Confirmação -->
-                    <div class="form-group">
-                        <label>Confirma presença? <span class="required">*</span></label>
-                        <div class="radio-group" id="presenca-group">
-                            <div class="radio-option">
-                                <input type="radio" id="presenca-sim" name="presenca" value="Sim" required />
-                                <label for="presenca-sim">🌸 Sim, vou!</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="presenca-nao" name="presenca" value="Não" />
-                                <label for="presenca-nao">🌱 Não poderei ir</label>
-                            </div>
-                        </div>
+                    <!-- Mensagem do Convite -->
+                    <p class="hero-poem">
+                        “A vida é feita de história, conquistas, fé<br />
+                        e das pessoas que caminhando ao nosso lado.”
+                    </p>
+
+                    <p class="hero-invite-text">
+                        Com muita alegria, convido você para celebrar meus 60 anos e vir compartilhar esse momento inesquecível comigo!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CONTADOR REGRESSIVO DOURADO CHAMPAGNE ===== -->
+        <div class="countdown-container">
+            <div class="countdown-card">
+                <div class="countdown-title">Falta pouco para celebrarmos</div>
+                <div class="countdown-grid" id="countdown-grid">
+                    <div class="time-box">
+                        <div class="time-value" id="cd-days">00</div>
+                        <div class="time-label">Dias</div>
                     </div>
-
-                    <!-- Dependentes -->
-                    <div class="dependentes-section" id="dependentes-section">
-                        <div class="form-group">
-                            <label for="qtd-dependentes">Acompanhantes / Dependentes</label>
-                            <select id="qtd-dependentes" name="qtd_dependentes">
-                                <option value="0">0 — Vou sozinho(a)</option>
-                                <option value="1">1 acompanhante</option>
-                                <option value="2">2 acompanhantes</option>
-                                <option value="3">3 acompanhantes</option>
-                                <option value="4">4 acompanhantes</option>
-                                <option value="5">5 ou mais</option>
-                            </select>
-                        </div>
-                        <div id="dependentes-nomes"></div>
+                    <div class="time-box">
+                        <div class="time-value" id="cd-hours">00</div>
+                        <div class="time-label">Horas</div>
                     </div>
-
-                    <!-- Mensagem -->
-                    <div class="form-group">
-                        <label for="mensagem">Algum recado ou observação?</label>
-                        <textarea id="mensagem" name="mensagem"
-                                  placeholder="Restrições alimentares, preferência de mesa, etc."></textarea>
+                    <div class="time-box">
+                        <div class="time-value" id="cd-minutes">00</div>
+                        <div class="time-label">Min</div>
                     </div>
+                    <div class="time-box">
+                        <div class="time-value" id="cd-seconds">00</div>
+                        <div class="time-label">Seg</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <button type="submit" class="btn-submit" id="btn-submit">
-                        Confirmar Presença
-                    </button>
-                </form>
+        <!-- ===== DETALHES DO EVENTO ===== -->
+        <div class="container">
+            <div class="section-header">
+                <div class="section-eyebrow">Programação & Local</div>
+                <h2 class="section-title">Informações da Festa</h2>
+            </div>
 
-                <div class="resubmit-info">
-                    🔄 Já preencheu antes? Pode preencher de novo para <strong>atualizar</strong> seus dados — a versão mais recente será considerada.
+            <div class="details-grid">
+                <!-- Data -->
+                <div class="detail-card">
+                    <div class="detail-icon-wrapper">📅</div>
+                    <div class="detail-card-label">Data</div>
+                    <div class="detail-card-value">12 de Setembro<br /><span style="font-weight: 400; font-size: 0.9rem; color: var(--text-muted);">Sábado, 2026</span></div>
+                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Festa+60+Anos+Dona+Maria&dates=20260912T160000Z/20260912T230000Z&details=Celebra%C3%A7%C3%A3o+dos+60+Anos+da+Dona+Maria&location=Rua+Caraibuna,+11+-+Taquara" 
+                       target="_blank" rel="noopener" class="detail-action-btn">
+                       + Add à Agenda
+                    </a>
+                </div>
+
+                <!-- Horário -->
+                <div class="detail-card">
+                    <div class="detail-icon-wrapper">⏰</div>
+                    <div class="detail-card-label">Horário</div>
+                    <div class="detail-card-value">13h às 20h<br /><span style="font-weight: 400; font-size: 0.9rem; color: var(--text-muted);">Recepção às 13h</span></div>
+                    <span class="detail-action-btn" style="cursor: default; opacity: 0.7;">
+                        8 Horas de Festa
+                    </span>
+                </div>
+
+                <!-- Local -->
+                <div class="detail-card">
+                    <div class="detail-icon-wrapper">📍</div>
+                    <div class="detail-card-label">Local</div>
+                    <div class="detail-card-value">Rua Caraibuna, 11<br /><span style="font-weight: 400; font-size: 0.9rem; color: var(--text-muted);">Taquara — RJ</span></div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Rua+Caraibuna+11+Taquara" 
+                       target="_blank" rel="noopener" class="detail-action-btn">
+                       🗺️ Ver no Mapa
+                    </a>
                 </div>
             </div>
 
-            <!-- Mensagem de expirado (aparece após a data limite) -->
-            <div class="expirado-box" id="expirado-box">
-                <div class="expirado-icon">🌷</div>
-                <h2>Confirmações encerradas</h2>
-                <p>O prazo para confirmar presença já passou. Se precisar de alguma informação, entre em contato conosco.</p>
+            <!-- CARDS DE INFORMAÇÃO COMPLEMENTAR (EM LINHAS INDIVIDUAIS DE LARGURA TOTAL) -->
+            <div class="info-grid">
+                <div class="info-card-box">
+                    <div class="info-icon">🏊</div>
+                    <div class="info-content">
+                        <h4>Local com Piscina!</h4>
+                        <p>O espaço possui uma linda piscina! Fique à vontade para trazer seu traje de banho e toalha para aproveitar o dia.</p>
+                    </div>
+                </div>
+
+                <div class="info-card-box">
+                    <div class="info-icon">🍷</div>
+                    <div class="info-content">
+                        <h4>Bebidas Alcoólicas</h4>
+                        <p>Caso deseje consumir bebidas alcoólicas de sua preferência, pedimos a gentileza de trazer a sua garrafa ou lata.</p>
+                    </div>
+                </div>
             </div>
+
+            <!-- ===== FORMULÁRIO RSVP ===== -->
+            <div class="rsvp-section" id="rsvp-section">
+                <div class="section-header" style="margin-bottom: 1.5rem;">
+                    <div class="section-eyebrow">Confirmação de Presença</div>
+                    <h2 class="section-title">Sua presença é nosso maior presente</h2>
+                </div>
+
+                <!-- Mensagem de Feedback -->
+                <div id="form-message" class="form-message"></div>
+
+                <!-- Formulário Ativo -->
+                <div id="form-ativo">
+                    <form id="rsvp-form" novalidate>
+                        <!-- Nome -->
+                        <div class="form-group">
+                            <label for="nome">Seu Nome Completo <span class="required">*</span></label>
+                            <input type="text" id="nome" name="nome" class="form-input"
+                                   placeholder="Digite seu nome completo" required autocomplete="name" />
+                        </div>
+
+                        <!-- Opção de Presença -->
+                        <div class="form-group">
+                            <label>Você irá ao aniversário? <span class="required">*</span></label>
+                            <div class="radio-grid" id="presenca-group">
+                                <div class="radio-card">
+                                    <input type="radio" id="presenca-sim" name="presenca" value="Sim" required />
+                                    <label for="presenca-sim">🌸 Sim, vou celebrar!</label>
+                                </div>
+                                <div class="radio-card">
+                                    <input type="radio" id="presenca-nao" name="presenca" value="Não" />
+                                    <label for="presenca-nao">🌱 Não poderei ir</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Acompanhantes / Dependentes -->
+                        <div class="dependentes-section" id="dependentes-section">
+                            <div class="form-group">
+                                <label for="qtd-dependentes">Acompanhantes / Família</label>
+                                <select id="qtd-dependentes" name="qtd_dependentes" class="form-select">
+                                    <option value="0">0 — Vou sozinho(a)</option>
+                                    <option value="1">1 acompanhante</option>
+                                    <option value="2">2 acompanhantes</option>
+                                    <option value="3">3 acompanhantes</option>
+                                    <option value="4">4 acompanhantes</option>
+                                    <option value="5">5 ou mais acompanhantes</option>
+                                </select>
+                            </div>
+                            <div id="dependentes-nomes"></div>
+                        </div>
+
+                        <!-- Mensagem ao Anfitrião -->
+                        <div class="form-group">
+                            <label for="mensagem">Deixe uma mensagem para a Dona Maria</label>
+                            <textarea id="mensagem" name="mensagem" class="form-textarea"
+                                      placeholder="Deixe um carinho, parabéns ou observação especial..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit" id="btn-submit">
+                            Confirmar Presença
+                        </button>
+                    </form>
+
+                    <div class="resubmit-info">
+                        🔄 <span>Já preencheu antes? Pode preencher novamente para <strong>atualizar</strong> suas informações.</span>
+                    </div>
+                </div>
+
+                <!-- Caso o prazo tenha expirado -->
+                <div class="expirado-box" id="expirado-box">
+                    <div class="expirado-icon">🌷</div>
+                    <h3>Confirmações Encerradas</h3>
+                    <p>O prazo para confirmação de presença se encerrou no dia 01/09/2026. Agradecemos o carinho de todos!</p>
+                </div>
+            </div>
+
         </div>
 
-        <div class="section-divider">✿ ❀ ✿ ❀ ✿</div>
+        <!-- ===== RODAPÉ ===== -->
+        <footer class="footer">
+            <div class="footer-brand">Maria 60 Anos</div>
+            <p>Com amor e gratidão pela sua amizade 🌸</p>
+        </footer>
 
-        <!-- ===== CONTADOR ===== -->
-        <div class="confirmed-section">
-            <p id="count-text">📋 Os confirmados aparecerão na planilha do Google</p>
-        </div>
+        <!-- Botão Flutuante Mobile -->
+        <a href="#rsvp-section" class="floating-rsvp-btn">
+            ✍️ Confirmar Presença
+        </a>
     </div>
-
-    <!-- ===== FOOTER ===== -->
-    <footer class="footer">
-        Feito com 💚 para a Festa Dona Maria
-    </footer>
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
@@ -581,20 +957,18 @@
             'use strict';
 
             // ============================================================
-            // 👇 CONFIGURE AQUI
+            // CONFIGURAÇÕES DO EVENTO & SUPABASE
             // ============================================================
-
             const SUPABASE_URL = 'https://qhkcilqktcdevkkysovp.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoa2NpbHFrdGNkZXZra3lzb3ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3NTk5NzksImV4cCI6MjEwMDMzNTk3OX0.gGg83qvinqHsZkdRacGYVRheCwawWeUKAHCiEpni9LU';
 
-            /** Data limite para confirmações (formato: AAAA-MM-DD) */
+            /** Data limite para confirmações (AAAA-MM-DD) */
             const DATA_LIMITE = '2026-09-01';
 
-            /** Data do evento (só para exibição) */
-            const DATA_EVENTO = '2026-09-12';
+            /** Data e Hora do Evento para o Relógio Regressivo */
+            const DATA_EVENTO_TARGET = new Date('2026-09-12T13:00:00-03:00').getTime();
 
-            // ============================================================
-
+            // DOM Elements
             const form = document.getElementById('rsvp-form');
             const formAtivo = document.getElementById('form-ativo');
             const expiradoBox = document.getElementById('expirado-box');
@@ -606,7 +980,106 @@
             const qtdDep = document.getElementById('qtd-dependentes');
             const depNomes = document.getElementById('dependentes-nomes');
 
-            // ---- Verificar expiração ----
+            // ============================================================
+            // 1. ANIMAÇÃO DE PARTÍCULAS DOURADAS BRILHANTES E VIVAS
+            // ============================================================
+            function initParticles() {
+                const canvas = document.getElementById('particle-canvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                let width = canvas.width = window.innerWidth;
+                let height = canvas.height = window.innerHeight;
+
+                window.addEventListener('resize', () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                });
+
+                const colors = [
+                    '#FFD700',
+                    '#FFB800',
+                    '#D4AF37',
+                    '#FFE599',
+                    '#E59866'
+                ];
+
+                const particles = [];
+                const particleCount = Math.min(85, Math.floor(width / 14));
+
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 3.5 + 1.5,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        alpha: Math.random() * 0.7 + 0.3,
+                        speedY: Math.random() * 0.6 + 0.25,
+                        speedX: (Math.random() - 0.5) * 0.35,
+                        pulseSpeed: Math.random() * 0.03 + 0.01,
+                        pulsePhase: Math.random() * Math.PI * 2
+                    });
+                }
+
+                function draw() {
+                    ctx.clearRect(0, 0, width, height);
+                    particles.forEach(p => {
+                        p.y -= p.speedY;
+                        p.x += Math.sin(Date.now() * 0.001 + p.pulsePhase) * p.speedX;
+                        p.pulsePhase += p.pulseSpeed;
+                        const currentAlpha = Math.max(0.2, Math.min(0.95, p.alpha + Math.sin(p.pulsePhase) * 0.25));
+
+                        if (p.y < -15) {
+                            p.y = height + 15;
+                            p.x = Math.random() * width;
+                        }
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        
+                        ctx.shadowBlur = 12;
+                        ctx.shadowColor = p.color;
+                        ctx.fillStyle = p.color;
+                        ctx.globalAlpha = currentAlpha;
+                        ctx.fill();
+                        ctx.globalAlpha = 1.0;
+                    });
+                    requestAnimationFrame(draw);
+                }
+                draw();
+            }
+            initParticles();
+
+            // ============================================================
+            // 2. CONTADOR REGRESSIVO
+            // ============================================================
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const diff = DATA_EVENTO_TARGET - now;
+
+                if (diff <= 0) {
+                    document.getElementById('cd-days').textContent = '00';
+                    document.getElementById('cd-hours').textContent = '00';
+                    document.getElementById('cd-minutes').textContent = '00';
+                    document.getElementById('cd-seconds').textContent = '00';
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+                document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // ============================================================
+            // 3. VERIFICAÇÃO DE EXPIRAÇÃO DE DATA
+            // ============================================================
             function verificarExpiracao() {
                 const hoje = new Date();
                 hoje.setHours(0, 0, 0, 0);
@@ -620,10 +1093,11 @@
                     expiradoBox.classList.remove('visible');
                 }
             }
-
             verificarExpiracao();
 
-            // ---- Mostra/esconde dependentes ----
+            // ============================================================
+            // 4. LÓGICA DO FORMULÁRIO E ACOMPANHANTES
+            // ============================================================
             function toggleDependentes() {
                 if (presencaSim.checked) {
                     depSection.classList.add('visible');
@@ -636,7 +1110,6 @@
             presencaSim.addEventListener('change', toggleDependentes);
             presencaNao.addEventListener('change', toggleDependentes);
 
-            // ---- Renderiza campos de nome dos acompanhantes ----
             function renderDepInputs() {
                 const qtd = parseInt(qtdDep.value, 10);
                 depNomes.innerHTML = '';
@@ -651,7 +1124,7 @@
                             <span class="dep-number">${i}.</span>
                             <input type="text" class="dep-nome"
                                    name="acompanhante_${i}"
-                                   placeholder="Nome do acompanhante ${i}" />
+                                   placeholder="Nome completo do acompanhante ${i}" />
                         `;
                         depNomes.appendChild(row);
                     }
@@ -662,7 +1135,7 @@
                         <span class="dep-number">✚</span>
                         <input type="text" class="dep-nome"
                                name="acompanhantes_lista"
-                               placeholder="Nomes dos acompanhantes (separados por vírgula)" />
+                               placeholder="Nomes de todos os acompanhantes (separados por vírgula)" />
                     `;
                     depNomes.appendChild(row);
                 }
@@ -670,7 +1143,7 @@
 
             qtdDep.addEventListener('change', renderDepInputs);
 
-            // ---- Feedback ----
+            // Feedback UI
             function showMessage(type, text) {
                 messageEl.className = 'form-message ' + type;
                 messageEl.textContent = text;
@@ -692,20 +1165,22 @@
                 }
             }
 
-            // ---- Submit ----
+            // ============================================================
+            // 5. ENVIO AO SUPABASE
+            // ============================================================
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 hideMessage();
 
                 const nome = document.getElementById('nome').value.trim();
                 if (!nome) {
-                    showMessage('error', 'Por favor, informe seu nome.');
+                    showMessage('error', 'Por favor, informe seu nome completo.');
                     document.getElementById('nome').focus();
                     return;
                 }
 
                 if (!presencaSim.checked && !presencaNao.checked) {
-                    showMessage('error', 'Selecione se confirma ou não presença.');
+                    showMessage('error', 'Por favor, selecione se confirma ou não sua presença.');
                     return;
                 }
 
@@ -731,7 +1206,7 @@
                 const data = {
                     nome: nome,
                     presenca: presenca,
-                    qtd_dependentes: presenca === 'Sim' ? parseInt(qtdDep.value) : 0,
+                    qtd_dependentes: presenca === 'Sim' ? parseInt(qtdDep.value, 10) : 0,
                     acompanhantes: acompanhantes,
                     mensagem: document.getElementById('mensagem').value.trim()
                 };
@@ -753,27 +1228,26 @@
                     if (!res.ok) throw new Error('HTTP ' + res.status);
 
                     const msg = presenca === 'Sim'
-                        ? '✅ Presença confirmada com sucesso! Mal podemos esperar! 🎂'
-                        : '📝 Tudo bem! Agradecemos o retorno.';
+                        ? '✨ Presença confirmada com sucesso! Mal podemos esperar para celebrar juntos! 🥂'
+                        : '📝 Resposta registrada! Agradecemos o seu retorno.';
 
-                    showMessage('success', msg + ' Se precisar alterar algo, é só preencher novamente.');
+                    showMessage('success', msg + ' Se precisar alterar algo, basta preencher novamente.');
                     form.reset();
                     depSection.classList.remove('visible');
                     depNomes.innerHTML = '';
 
                 } catch (err) {
                     console.error('Erro ao enviar:', err);
-                    showMessage('error', 'Ops, não foi possível enviar. Tente novamente ou avise pelo WhatsApp.');
+                    showMessage('error', 'Ops! Não foi possível enviar no momento. Por favor, tente novamente.');
                 } finally {
                     setLoading(false);
                 }
             });
 
-            // ---- Inicialização ----
+            // Inicialização
             toggleDependentes();
 
         })();
     </script>
-
 </body>
 </html>
