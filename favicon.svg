@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <radialGradient id="navyBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1A3258"/>
+      <stop offset="100%" stop-color="#0F1F38"/>
+    </radialGradient>
+    
+    <linearGradient id="goldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE8B0"/>
+      <stop offset="50%" stop-color="#C59E4E"/>
+      <stop offset="100%" stop-color="#8C6D33"/>
+    </linearGradient>
+
+    <linearGradient id="goldText" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF3D1"/>
+      <stop offset="30%" stop-color="#F5E5C9"/>
+      <stop offset="70%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#9A7730"/>
+    </linearGradient>
+    
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Base Circle Navy -->
+  <circle cx="256" cy="256" r="240" fill="url(#navyBg)" stroke="url(#goldBorder)" stroke-width="16" />
+
+  <!-- Inner Decorative Ring -->
+  <circle cx="256" cy="256" r="216" fill="none" stroke="url(#goldBorder)" stroke-width="3" stroke-dasharray="8 6" opacity="0.6" />
+
+  <!-- Floating Balloons Graphic top-right -->
+  <g filter="url(#goldGlow)">
+    <!-- Balloon 1 -->
+    <ellipse cx="340" cy="160" rx="36" ry="44" fill="url(#goldText)" />
+    <path d="M340 204 L336 212 L344 212 Z" fill="#8C6D33"/>
+    <path d="M340 212 Q335 230 342 245" stroke="#C59E4E" stroke-width="3" fill="none"/>
+    
+    <!-- Balloon 2 (small) -->
+    <ellipse cx="170" cy="150" rx="28" ry="34" fill="url(#goldText)" opacity="0.85" />
+    <path d="M170 184 L166 190 L174 190 Z" fill="#8C6D33"/>
+    <path d="M170 190 Q175 205 168 220" stroke="#C59E4E" stroke-width="2.5" fill="none"/>
+
+    <!-- Number 60 -->
+    <text x="256" y="325" 
+          font-family="'Cinzel', 'Georgia', serif" 
+          font-size="190" 
+          font-weight="700" 
+          fill="url(#goldText)" 
+          text-anchor="middle"
+          letter-spacing="-6">60</text>
+  </g>
+
+  <!-- Sparkle Stars -->
+  <path d="M 256 70 L 262 90 L 282 96 L 262 102 L 256 122 L 250 102 L 230 96 L 250 90 Z" fill="url(#goldText)"/>
+  <path d="M 110 270 L 114 282 L 126 286 L 114 290 L 110 302 L 106 290 L 94 286 L 106 282 Z" fill="url(#goldText)" transform="scale(0.8) translate(30, 20)"/>
+  <path d="M 390 290 L 394 302 L 406 306 L 394 310 L 390 322 L 386 310 L 374 306 L 386 302 Z" fill="url(#goldText)" transform="scale(0.8) translate(-30, 0)"/>
+</svg>
