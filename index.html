@@ -21,50 +21,45 @@
 
         /* ===== HERO ===== */
         .hero {
-            background: linear-gradient(180deg, #f7f0e6 0%, #ede2d4 100%);
+            background: #f2ebe3;
             text-align: center;
-            padding: 1.5rem 1rem;
+            padding: 3rem 1rem 2.5rem;
             position: relative;
             overflow: hidden;
         }
         .hero::before {
-            content: '🌸 🌿 🌷 🌻 🌾';
+            content: '🌸  🌿  🌷  🌻  🌾';
             position: absolute;
-            top: 8px;
+            top: 12px;
             left: 0;
             right: 0;
-            font-size: 1.8rem;
-            letter-spacing: 1.2rem;
-            opacity: 0.3;
-            white-space: nowrap;
-            pointer-events: none;
+            font-size: 1.4rem;
+            letter-spacing: 1.5rem;
             text-align: center;
+            opacity: 0.45;
+            pointer-events: none;
         }
         .hero::after {
-            content: '🌾 🌻 🌷 🌿 🌸';
+            content: '🌾  🌻  🌷  🌿  🌸';
             position: absolute;
-            bottom: 8px;
+            bottom: 12px;
             left: 0;
             right: 0;
-            font-size: 1.8rem;
-            letter-spacing: 1.2rem;
-            opacity: 0.3;
-            white-space: nowrap;
-            pointer-events: none;
+            font-size: 1.4rem;
+            letter-spacing: 1.5rem;
             text-align: center;
+            opacity: 0.45;
+            pointer-events: none;
         }
         .hero-banner {
-            width: 40%;
+            width: 100%;
+            max-width: 720px;
             height: auto;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
             margin: 0 auto;
-        }
-        @media (max-width: 768px) {
-            .hero-banner { width: 65%; }
-        }
-        @media (max-width: 480px) {
-            .hero-banner { width: 85%; }
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(61, 44, 31, 0.12);
         }
 
         .hero h1 {
