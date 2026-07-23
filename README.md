@@ -1,4 +1,7 @@
-# 🎉 Festa Dona Maria — Convite Online
+# 🎉 Festa Dona Maria — 60 Anos 🎂
+
+> **📌 Repositório:** [github.com/Fabrycio13/aniversario60anos](https://github.com/Fabrycio13/aniversario60anos)  
+> **🌐 Página ao vivo:** [fabrycio13.github.io/aniversario60anos/](https://fabrycio13.github.io/aniversario60anos/)
 
 Página web para convidados confirmarem presença com dados salvos automaticamente no Google Sheets.
 
