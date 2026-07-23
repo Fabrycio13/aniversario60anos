@@ -164,7 +164,25 @@
             border-left: 3px solid var(--gold);
             border-radius: 6px;
             font-size: 0.88rem;
+            display: none;
         }
+        .acompanhantes.visible { display: block; }
+        .btn-acomp {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+            padding: 0.35rem 0.8rem;
+            background: none;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 0.78rem;
+            color: var(--gold-deep);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-acomp:hover { background: #faf3e2; }
         .mensagem {
             margin-top: 0.5rem;
             font-style: italic;
@@ -330,14 +348,18 @@
                         </div>
                         ${d.presenca === 'Sim' ? `
                             <div class="detalhes">
-                                <span class="detalhe-item">👥 ${qtdDep} ${qtdDep === 1 ? 'acompanhante' : 'acompanhantes'}</span>
-                                ${qtdDep > 0 ? `<span class="detalhe-item">📅 ${qtdDep + 1} pessoas no total</span>` : ''}
+                                ${qtdDep > 0 ? `<span class="detalhe-item">📅 ${qtdDep + 1} pessoas</span>` : ''}
                             </div>
                             ${temAcompanhantes ? `
+                                <button class="btn-acomp" onclick="toggleAcomp(this)">
+                                    👥 ${qtdDep} ${qtdDep === 1 ? 'acompanhante' : 'acompanhantes'}
+                                </button>
                                 <div class="acompanhantes">
                                     <strong>Acompanhantes:</strong> ${escapeHtml(d.acompanhantes)}
                                 </div>
-                            ` : ''}
+                            ` : `
+                                ${qtdDep > 0 ? '<div class="detalhes"><span class="detalhe-item">👥 ' + qtdDep + ' ' + (qtdDep === 1 ? 'acompanhante' : 'acompanhantes') + ' (sem nomes)</span></div>' : ''}
+                            `}
                         ` : ''}
                         ${d.mensagem && d.mensagem.trim() ? `
                             <div class="mensagem">"${escapeHtml(d.mensagem)}"</div>
@@ -346,6 +368,16 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function toggleAcomp(btn) {
+            const div = btn.nextElementSibling;
+            if (div && div.classList.contains('acompanhantes')) {
+                div.classList.toggle('visible');
+                btn.textContent = div.classList.contains('visible')
+                    ? '🙈 Ocultar acompanhantes'
+                    : '👥 Ver acompanhantes';
+            }
         }
 
         async function carregar() {
