@@ -209,6 +209,19 @@
         const toast = document.getElementById('toast');
         let currentLinks = [];
 
+        // Supabase
+        const SB_URL = 'https://qhkcilqktcdevkkysovp.supabase.co';
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoa2NpbHFrdGNkZXZra3lzb3ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3NTk5NzksImV4cCI6MjEwMDMzNTk3OX0.gGg83qvinqHsZkdRacGYVRheCwawWeUKAHCiEpni9LU';
+
+        function sbHeaders() {
+            return {
+                'Content-Type': 'application/json',
+                'apikey': SB_KEY,
+                'Authorization': 'Bearer ' + SB_KEY,
+                'Prefer': 'return=minimal'
+            };
+        }
+
         function showToast(msg) {
             toast.textContent = msg;
             toast.classList.add('show');
@@ -220,7 +233,7 @@
             return base + '?nome=' + encodeURIComponent(nome.trim());
         }
 
-        function gerarLinks() {
+        async function gerarLinks() {
             const nomes = namesInput.value
                 .split('\n')
                 .map(n => n.trim())
@@ -230,12 +243,41 @@
                 linksList.innerHTML = '<div class="empty">Digite pelo menos um nome</div>';
                 counter.textContent = '0 links gerados';
                 currentLinks = [];
+                render();
                 return;
+            }
+
+            // Limpa tabela e salva tudo de novo
+            await fetch(SB_URL + '/rest/v1/links_gerados', {
+                method: 'DELETE',
+                headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+            }).catch(() => {});
+
+            for (const nome of nomes) {
+                await fetch(SB_URL + '/rest/v1/links_gerados', {
+                    method: 'POST',
+                    headers: sbHeaders(),
+                    body: JSON.stringify({ nome: nome, link: buildLink(nome) })
+                }).catch(() => {});
             }
 
             currentLinks = nomes.map(buildLink);
             render();
             showToast(`${currentLinks.length} links gerados`);
+        }
+
+        async function carregarLinks() {
+            try {
+                const res = await fetch(SB_URL + '/rest/v1/links_gerados?select=*&order=id.asc', {
+                    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+                });
+                if (!res.ok) return;
+                const dados = await res.json();
+                if (dados.length === 0) return;
+                namesInput.value = dados.map(d => d.nome).join('\n');
+                currentLinks = dados.map(d => d.link);
+                render();
+            } catch (e) {}
         }
 
         function render() {
@@ -244,7 +286,6 @@
                 counter.textContent = '0 links gerados';
                 return;
             }
-
             counter.textContent = `${currentLinks.length} link${currentLinks.length > 1 ? 's' : ''} gerado${currentLinks.length > 1 ? 's' : ''}`;
             linksList.innerHTML = currentLinks.map((link, i) => `
                 <div class="link-item">
@@ -255,51 +296,42 @@
         }
 
         async function copiarUm(idx) {
-            try {
-                await navigator.clipboard.writeText(currentLinks[idx]);
-                showToast('Link copiado!');
-            } catch (e) {
-                showToast('Erro ao copiar');
-            }
+            try { await navigator.clipboard.writeText(currentLinks[idx]); showToast('Link copiado!'); }
+            catch (e) { showToast('Erro ao copiar'); }
         }
 
         async function copiarTodos() {
-            if (currentLinks.length === 0) {
-                showToast('Gere os links primeiro');
-                return;
-            }
-            try {
-                await navigator.clipboard.writeText(currentLinks.join('\n'));
-                showToast('Todos copiados!');
-            } catch (e) {
-                showToast('Erro ao copiar');
-            }
+            if (currentLinks.length === 0) { showToast('Gere os links primeiro'); return; }
+            try { await navigator.clipboard.writeText(currentLinks.join('\n')); showToast('Todos copiados!'); }
+            catch (e) { showToast('Erro ao copiar'); }
         }
 
         function baixarTxt() {
-            if (currentLinks.length === 0) {
-                showToast('Gere os links primeiro');
-                return;
-            }
+            if (currentLinks.length === 0) { showToast('Gere os links primeiro'); return; }
             const blob = new Blob([currentLinks.join('\n')], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
+            a.href = URL.createObjectURL(blob);
             a.download = 'links_convite.txt';
             a.click();
-            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(a.href);
         }
 
-        function limpar() {
+        async function limpar() {
+            await fetch(SB_URL + '/rest/v1/links_gerados', {
+                method: 'DELETE',
+                headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+            }).catch(() => {});
             currentLinks = [];
+            namesInput.value = '';
             render();
             showToast('Limpo');
         }
 
-        // Gera automaticamente quando cola lista no textarea
-        namesInput.addEventListener('paste', () => {
-            setTimeout(gerarLinks, 50);
-        });
+        // Gera ao colar
+        namesInput.addEventListener('paste', () => setTimeout(gerarLinks, 100));
+
+        // Carrega do Supabase ao abrir a página
+        carregarLinks();
     </script>
 </body>
 </html>
