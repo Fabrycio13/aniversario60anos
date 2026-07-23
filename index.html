@@ -939,6 +939,13 @@
                             <div id="dependentes-nomes"></div>
                         </div>
 
+                        <!-- Mensagem ao Anfitrião -->
+                        <div class="form-group">
+                            <label for="mensagem">Deixe uma mensagem para a Dona Maria</label>
+                            <textarea id="mensagem" name="mensagem" class="form-textarea"
+                                      placeholder="Deixe um carinho, parabéns ou observação especial..."></textarea>
+                        </div>
+
                         <button type="submit" class="btn-submit" id="btn-submit">
                             Confirmar Presença
                         </button>
@@ -1246,7 +1253,7 @@
                     presenca: presenca,
                     qtd_dependentes: presenca === 'Sim' ? parseInt(qtdDep.value, 10) : 0,
                     acompanhantes: acompanhantes,
-                    mensagem: ''
+                    mensagem: document.getElementById('mensagem').value.trim()
                 };
 
                 setLoading(true);
@@ -1269,8 +1276,13 @@
                         ? '✨ Presença confirmada com sucesso! Mal podemos esperar para celebrar juntos! 🥂'
                         : '📝 Resposta registrada! Agradecemos o seu retorno.';
 
-                    showMessage('success', msg + ' Se precisar alterar algo, basta preencher novamente.');
+                    showMessage('success', msg + ' Se precisar alterar algo, basta ajustar os campos acima e clicar em enviar novamente.');
+                    
+                    // Em vez de form.reset() completo, limpamos os outros campos mas mantemos o nome pré-preenchido
+                    const nomeSalvo = document.getElementById('nome').value;
                     form.reset();
+                    document.getElementById('nome').value = nomeSalvo;
+                    
                     depSection.classList.remove('visible');
                     depNomes.innerHTML = '';
 
@@ -1299,7 +1311,7 @@
                 const nomeField = document.getElementById('nome');
                 nomeField.value = nomeParam.replace(/\+/g, ' ');
                 nomeField.readOnly = true;
-                nomeField.style.background = '#f7f1e3';
+                nomeField.style.background = '#FAF6F0';
                 nomeField.style.cursor = 'default';
             }
             prefillFromURL();
