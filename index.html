@@ -346,21 +346,31 @@
             margin-bottom: 0.8rem;
         }
 
+        /* Grupo de botões de agenda universal */
+        .calendar-btn-group {
+            display: flex;
+            gap: 0.4rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
         .detail-action-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.48rem 1rem;
+            gap: 0.35rem;
+            padding: 0.45rem 0.8rem;
             background: #FFFFFF;
             border: 1px solid var(--border-gold-strong);
             border-radius: 50px;
-            font-size: 0.75rem;
+            font-size: 0.73rem;
             font-weight: 600;
             color: var(--gold-dark);
             text-decoration: none;
             transition: all 0.25s;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(197, 158, 78, 0.08);
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
         .detail-action-btn:hover {
             background: var(--navy-royal);
@@ -368,7 +378,7 @@
             border-color: var(--navy-royal);
         }
 
-        /* CARDS INFORMATIVOS — EM LINHAS INDIVIDUAIS DE LARGURA TOTAL (MAIOR DESTAQUE) */
+        /* CARDS INFORMATIVOS */
         .info-grid {
             display: flex;
             flex-direction: column;
@@ -814,10 +824,15 @@
                     <div class="detail-icon-wrapper">📅</div>
                     <div class="detail-card-label">Data</div>
                     <div class="detail-card-value">12 de Setembro<br /><span style="font-weight: 400; font-size: 0.9rem; color: var(--text-muted);">Sábado, 2026</span></div>
-                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Festa+60+Anos+Dona+Maria&dates=20260912T160000Z/20260912T230000Z&details=Celebra%C3%A7%C3%A3o+dos+60+Anos+da+Dona+Maria&location=Rua+Caraibuna,+11+-+Taquara" 
-                       target="_blank" rel="noopener" class="detail-action-btn">
-                       + Add à Agenda
-                    </a>
+                    <div class="calendar-btn-group">
+                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Festa+60+Anos+Dona+Maria&dates=20260912T160000Z/20260912T230000Z&details=Celebra%C3%A7%C3%A3o+dos+60+Anos+da+Dona+Maria&location=Rua+Caraibuna,+11+-+Taquara" 
+                           target="_blank" rel="noopener" class="detail-action-btn" title="Adicionar no Google Agenda">
+                           🔵 Google
+                        </a>
+                        <button type="button" id="btn-ical" class="detail-action-btn" title="Adicionar no iPhone / iCal / Outros">
+                           🍎 Apple / iCal
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Horário -->
@@ -842,7 +857,7 @@
                 </div>
             </div>
 
-            <!-- CARDS DE INFORMAÇÃO COMPLEMENTAR (EM LINHAS INDIVIDUAIS DE LARGURA TOTAL) -->
+            <!-- CARDS DE INFORMAÇÃO COMPLEMENTAR -->
             <div class="info-grid">
                 <div class="info-card-box">
                     <div class="info-icon">🏊</div>
@@ -979,6 +994,45 @@
             const depSection = document.getElementById('dependentes-section');
             const qtdDep = document.getElementById('qtd-dependentes');
             const depNomes = document.getElementById('dependentes-nomes');
+            const btnIcal = document.getElementById('btn-ical');
+
+            // ============================================================
+            // 0. GERADOR DE AGENDA UNIVERSAL (.ICS PARA APPLE / OUTLOOK / ANDROID)
+            // ============================================================
+            if (btnIcal) {
+                btnIcal.addEventListener('click', function() {
+                    const title = 'Festa 60 Anos Dona Maria';
+                    const description = 'Celebração dos 60 Anos da Dona Maria! Venha comemorar conosco.';
+                    const location = 'Rua Caraibuna, 11 - Taquara, Rio de Janeiro - RJ';
+                    const startDate = '20260912T160000Z'; // 13:00 BRT
+                    const endDate = '20260912T230000Z';   // 20:00 BRT
+
+                    const icsData = [
+                        'BEGIN:VCALENDAR',
+                        'VERSION:2.0',
+                        'PRODID:-//Festa Dona Maria//PT-BR',
+                        'CALSCALE:GREGORIAN',
+                        'METHOD:PUBLISH',
+                        'BEGIN:VEVENT',
+                        'SUMMARY:' + title,
+                        'DESCRIPTION:' + description,
+                        'LOCATION:' + location,
+                        'DTSTART:' + startDate,
+                        'DTEND:' + endDate,
+                        'STATUS:CONFIRMED',
+                        'END:VEVENT',
+                        'END:VCALENDAR'
+                    ].join('\r\n');
+
+                    const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.setAttribute('download', 'festa-dona-maria-60-anos.ics');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+            }
 
             // ============================================================
             // 1. ANIMAÇÃO DE PARTÍCULAS DOURADAS BRILHANTES E VIVAS
