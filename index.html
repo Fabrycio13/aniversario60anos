@@ -362,7 +362,8 @@
             margin-bottom: 0.8rem;
         }
 
-        .detail-action-btn {
+        .detail-action-btn,
+        .detail-action-note {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
@@ -375,10 +376,12 @@
             color: var(--gold-dark);
             text-decoration: none;
             transition: all 0.25s;
-            cursor: pointer;
             box-shadow: 0 2px 8px rgba(197, 158, 78, 0.08);
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin-top: auto;
+        }
+        .detail-action-btn {
+            cursor: pointer;
         }
         .detail-action-btn:hover {
             background: var(--navy-royal);
@@ -842,7 +845,8 @@
                 <div class="detail-card">
                     <div class="detail-icon-wrapper">⏰</div>
                     <div class="detail-card-label">Horário</div>
-                    <div class="detail-card-value">A partir das 13h<br /><span style="font-weight: 400; font-size: 0.9rem; color: var(--text-muted);">Esperamos por você!</span></div>
+                    <div class="detail-card-value">A partir das 13h</div>
+                    <div class="detail-action-note">Esperamos por você!</div>
                 </div>
 
                 <!-- Local -->
