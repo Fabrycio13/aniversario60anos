@@ -962,7 +962,7 @@
                 <div class="expirado-box" id="expirado-box">
                     <div class="expirado-icon">🌷</div>
                     <h3>Confirmações Encerradas</h3>
-                    <p>O prazo para confirmação de presença se encerrou no dia 01/09/2026. Agradecemos o carinho de todos!</p>
+                    <p>O prazo para confirmação de presença se encerrou no dia 05/09/2026. Agradecemos o carinho de todos!</p>
                 </div>
             </div>
 
@@ -992,7 +992,7 @@
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoa2NpbHFrdGNkZXZra3lzb3ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3NTk5NzksImV4cCI6MjEwMDMzNTk3OX0.gGg83qvinqHsZkdRacGYVRheCwawWeUKAHCiEpni9LU';
 
             /** Data limite para confirmações (AAAA-MM-DD) */
-            const DATA_LIMITE = '2026-09-01';
+            const DATA_LIMITE = '2026-09-05';
 
             /** Data e Hora do Evento para o Relógio Regressivo */
             const DATA_EVENTO_TARGET = new Date('2026-09-12T13:00:00-03:00').getTime();
@@ -1303,6 +1303,12 @@
                 const nomeParam = params.get('nome');
                 const formAtivo = document.getElementById('form-ativo');
                 const acessoNegado = document.getElementById('acesso-negado');
+
+                // Se já expirou, não mostra mensagem de link inválido (encerrado tem prioridade)
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
+                const expirado = hoje > new Date(DATA_LIMITE + 'T23:59:59');
+                if (expirado) return;
 
                 if (!nomeParam) {
                     formAtivo.style.display = 'none';
