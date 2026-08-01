@@ -418,18 +418,20 @@
             background: var(--gold-deep);
         }
         .btn-editar {
-            padding: 0.3rem 0.6rem;
+            padding: 0.3rem 0.5rem;
             background: none;
             border: 1px solid var(--line);
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
             color: var(--ink-soft);
-            margin-left: 0.5rem;
+            transition: all 0.15s;
+            flex-shrink: 0;
         }
         .btn-editar:hover {
             background: #faf3e2;
             border-color: var(--gold);
+            color: var(--gold-deep);
         }
 
         @media (max-width: 600px) {
@@ -684,7 +686,7 @@
                                 </span>
                             ` : ''}
                             <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
-                            <button class="btn-editar" onclick="event.stopPropagation(); abrirModalEdicao('${escapeHtml(nomeId)}')">✏️ Editar</button>
+                            <button class="btn-editar" onclick="event.stopPropagation(); abrirModalEdicao('${escapeHtml(nomeId)}')" title="Editar">✏️</button>
                         </div>
                         <div class="card-expandido">
                             ${nomesAcompanhantes.length > 0 ? `
@@ -836,10 +838,8 @@
             };
 
             try {
-                // Usa upsert pelo nome_normalizado
-                const nomeNormalizado = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
-
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/confirmacoes?nome_normalizado=eq.${encodeURIComponent(nomeNormalizado)}`, {
+                // Atualiza pelo nome original
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/confirmacoes?nome=eq.${encodeURIComponent(nome)}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
@@ -850,14 +850,17 @@
                     body: JSON.stringify(data)
                 });
 
-                if (!res.ok) throw new Error('HTTP ' + res.status);
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error('HTTP ' + res.status + ': ' + text);
+                }
 
                 fecharModal();
-                carregar(); // Recarrega a lista
+                carregar(); // Recarrega a lista do banco
 
             } catch (err) {
                 console.error('Erro ao salvar:', err);
-                alert('Erro ao salvar. Tente novamente.');
+                alert('Erro ao salvar: ' + err.message);
             }
         });
 
