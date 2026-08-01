@@ -499,8 +499,11 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
             .wrap {
-                padding: 1rem;
+                padding: 0;
             }
             .sidebar {
                 position: static;
@@ -513,14 +516,65 @@
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
+                gap: 0.3rem;
             }
-            .stats { grid-template-columns: repeat(2, 1fr); }
-            .nome { font-size: 1.05rem; max-width: 100px; }
-            header h1 { font-size: 1.6rem; }
-            .card-linha { grid-template-columns: 90px minmax(100px, 1fr) auto auto; }
-            .data-linha { font-size: 0.65rem; }
-            .controles { flex-direction: column; }
-            .busca { min-width: 100%; }
+            .nav-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            header h1 { font-size: 1.5rem; }
+            .stats { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 0.5rem;
+            }
+            .stat-card {
+                padding: 0.8rem;
+            }
+            .stat-card .value {
+                font-size: 1.3rem;
+            }
+            .controles { 
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .busca { 
+                min-width: 100%;
+            }
+            .card-linha {
+                grid-template-columns: 1fr auto;
+                gap: 0.3rem;
+                padding: 0.6rem 0.5rem;
+            }
+            .card-linha .nome {
+                font-size: 0.9rem;
+                max-width: none;
+                grid-column: 1;
+            }
+            .card-linha .qtd {
+                font-size: 0.75rem;
+                text-align: left;
+            }
+            .card-linha .data-linha {
+                font-size: 0.65rem;
+                grid-column: 1 / -1;
+            }
+            .card-linha .controles {
+                flex-direction: row;
+                justify-content: flex-end;
+            }
+            .btn-editar, .btn-status {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.7rem;
+            }
+            .pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.3rem;
+            }
+            .paginabtn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
