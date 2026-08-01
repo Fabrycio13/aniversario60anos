@@ -583,7 +583,7 @@
         const ITEMS_PER_PAGE = 15;
 
         function escapeHtml(s) {
-            if (!s) return '';
+            if (s == null || typeof s !== 'string') return '';
             return s.replace(/[&<>"']/g, c => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
             }[c]));
