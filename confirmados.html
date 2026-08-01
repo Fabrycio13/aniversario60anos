@@ -301,6 +301,137 @@
             text-decoration: none;
         }
 
+        /* Modal de Edição */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.visible {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 14px;
+            padding: 1.8rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--ink);
+        }
+        .modal .form-group {
+            margin-bottom: 1rem;
+        }
+        .modal label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .modal input, .modal select, .modal textarea {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: #fff;
+        }
+        .modal input:focus, .modal select:focus, .modal textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .modal textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .acomp-edit-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+        .acomp-edit-row input {
+            flex: 1;
+        }
+        .acomp-edit-row button {
+            padding: 0.5rem 0.7rem;
+            background: #f5d8d4;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #8a2c1f;
+            font-size: 1rem;
+        }
+        .btn-add-acomp {
+            background: #d4ead2;
+            color: #2d5e2f;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+        .modal-actions button {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-cancelar {
+            background: #f0f0f0;
+            color: var(--ink);
+        }
+        .btn-salvar {
+            background: var(--gold);
+            color: #fff;
+        }
+        .btn-salvar:hover {
+            background: var(--gold-deep);
+        }
+        .btn-editar {
+            padding: 0.3rem 0.6rem;
+            background: none;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--ink-soft);
+            margin-left: 0.5rem;
+        }
+        .btn-editar:hover {
+            background: #faf3e2;
+            border-color: var(--gold);
+        }
+
         @media (max-width: 600px) {
             .stats { grid-template-columns: repeat(2, 1fr); }
             .nome { font-size: 1.05rem; }
@@ -385,6 +516,55 @@
         <footer>
             <a href="/gerar.html">🔗 Gerar Links</a> · <a href="/confirmados.html">📋 Confirmados</a> · <span style="opacity:0.5">Atualiza automaticamente</span>
         </footer>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div class="modal-overlay" id="modal-editar">
+        <div class="modal">
+            <h3>✏️ Editar Confirmação</h3>
+            <form id="form-editar">
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" id="edit-nome" />
+                </div>
+                <div class="form-group">
+                    <label>Presença</label>
+                    <select id="edit-presenca">
+                        <option value="Sim">🌸 Confirmou</option>
+                        <option value="Não">🌱 Não vai</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade de Acompanhantes</label>
+                    <select id="edit-qtd-acomp">
+                        <option value="0">Nenhum</option>
+                        <option value="1">1 pessoa</option>
+                        <option value="2">2 pessoas</option>
+                        <option value="3">3 pessoas</option>
+                        <option value="4">4 pessoas</option>
+                        <option value="5">5 pessoas</option>
+                        <option value="6">6 pessoas</option>
+                        <option value="7">7 pessoas</option>
+                        <option value="8">8 pessoas</option>
+                        <option value="9">9 pessoas</option>
+                        <option value="10">10 pessoas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nomes dos Acompanhantes</label>
+                    <div id="edit-acompanhantes"></div>
+                    <button type="button" class="btn-add-acomp" onclick="addAcompEditRow()">+ Adicionar acompanhante</button>
+                </div>
+                <div class="form-group">
+                    <label>Mensagem</label>
+                    <textarea id="edit-mensagem" placeholder="Mensagem para a Maria..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -485,8 +665,13 @@
                 const temAcompanhantes = d.acompanhantes && d.acompanhantes.trim().length > 0;
                 const temInfoExtra = temAcompanhantes || (d.mensagem && d.mensagem.trim());
 
+                // Separa nomes dos acompanhantes
+                const nomesAcompanhantes = temAcompanhantes
+                    ? d.acompanhantes.split(';').map(n => n.trim()).filter(n => n)
+                    : [];
+
                 return `
-                    <div class="card" onclick="toggleExpand(this)" ${!temInfoExtra ? 'style="cursor:default"' : ''}>
+                    <div class="card" onclick="toggleExpand(event, this)" data-id="${escapeHtml(d.id || d.nome)}">
                         <div class="card-linha">
                             <span class="data-linha">${formatDate(d.created_at)}</span>
                             <span class="nome">${escapeHtml(d.nome)}</span>
@@ -496,11 +681,15 @@
                                 </span>
                             ` : ''}
                             <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
+                            <button class="btn-editar" onclick="event.stopPropagation(); abrirModalEdicao('${escapeHtml(d.id || d.nome)}')">✏️ Editar</button>
                         </div>
                         <div class="card-expandido">
-                            ${temAcompanhantes ? `
+                            ${nomesAcompanhantes.length > 0 ? `
                                 <div class="acompanhantes">
-                                    <strong>Acompanhantes:</strong> ${escapeHtml(d.acompanhantes)}
+                                    <strong>Acompanhantes:</strong>
+                                    <ul style="margin: 0.5rem 0 0 1.2rem; padding: 0;">
+                                        ${nomesAcompanhantes.map(n => `<li style="margin-bottom: 0.25rem;">${escapeHtml(n)}</li>`).join('')}
+                                    </ul>
                                 </div>
                             ` : ''}
                             ${d.mensagem && d.mensagem.trim() ? `
@@ -557,11 +746,114 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function toggleExpand(card) {
+        function toggleExpand(event, card) {
+            // Não expande se clicou no botão de editar
+            if (event.target.closest('.btn-editar')) return;
             const expandido = card.querySelector('.card-expandido');
             if (!expandido) return;
             expandido.classList.toggle('visible');
         }
+
+        // ===== MODAL DE EDIÇÃO =====
+        let editandoId = null;
+
+        function abrirModalEdicao(id) {
+            editandoId = id;
+            const item = allData.find(d => (d.id || d.nome) === id);
+            if (!item) return;
+
+            document.getElementById('edit-nome').value = item.nome || '';
+            document.getElementById('edit-presenca').value = item.presenca || 'Sim';
+            document.getElementById('edit-mensagem').value = item.mensagem || '';
+
+            const qtd = parseInt(item.qtd_dependentes) || 0;
+            document.getElementById('edit-qtd-acomp').value = qtd;
+
+            // Renderiza campos de acompanhantes
+            renderAcompEditRows(qtd, item.acompanhantes);
+
+            document.getElementById('modal-editar').classList.add('visible');
+        }
+
+        function renderAcompEditRows(qtd, acompanhantesStr) {
+            const container = document.getElementById('edit-acompanhantes');
+            const nomes = acompanhantesStr ? acompanhantesStr.split(';').map(n => n.trim()).filter(n => n) : [];
+            container.innerHTML = '';
+
+            for (let i = 0; i < qtd; i++) {
+                addAcompEditRow(nomes[i] || '');
+            }
+        }
+
+        function addAcompEditRow(valor = '') {
+            const container = document.getElementById('edit-acompanhantes');
+            const row = document.createElement('div');
+            row.className = 'acomp-edit-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Nome do acompanhante" value="${escapeHtml(valor)}" />
+                <button type="button" onclick="this.parentElement.remove()">✕</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function fecharModal() {
+            document.getElementById('modal-editar').classList.remove('visible');
+            editandoId = null;
+        }
+
+        document.getElementById('edit-qtd-acomp').addEventListener('change', function() {
+            const qtd = parseInt(this.value);
+            renderAcompEditRows(qtd, '');
+        });
+
+        document.getElementById('form-editar').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('edit-nome').value.trim();
+            const presenca = document.getElementById('edit-presenca').value;
+            const qtdAcomp = parseInt(document.getElementById('edit-qtd-acomp').value);
+            const mensagem = document.getElementById('edit-mensagem').value.trim();
+
+            // Coleta nomes dos acompanhantes
+            const acompInputs = document.querySelectorAll('#edit-acompanhantes input');
+            const acompNomes = Array.from(acompInputs)
+                .map(i => i.value.trim())
+                .filter(n => n);
+            const acompanhantesStr = acompNomes.join('; ');
+
+            const data = {
+                nome: nome,
+                presenca: presenca,
+                qtd_dependentes: qtdAcomp,
+                acompanhantes: acompanhantesStr,
+                mensagem: mensagem
+            };
+
+            try {
+                // Usa upsert pelo nome_normalizado
+                const nomeNormalizado = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
+
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/confirmacoes?nome_normalizado=eq.${encodeURIComponent(nomeNormalizado)}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+
+                fecharModal();
+                carregar(); // Recarrega a lista
+
+            } catch (err) {
+                console.error('Erro ao salvar:', err);
+                alert('Erro ao salvar. Tente novamente.');
+            }
+        });
 
         async function carregar() {
             try {
