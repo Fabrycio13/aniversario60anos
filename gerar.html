@@ -296,33 +296,7 @@
                     <label>Adicionar nomes (um por linha)</label>
                     <div class="row">
                         <textarea id="namesInput" placeholder="Maria Silva - 3&#10;João Santos&#10;Pedro - 0"></textarea>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; align-self: flex-start;">
-                            <button onclick="adicionar()">Adicionar</button>
-                            <label style="font-size: 0.7rem; text-transform: none; letter-spacing: 0;">Padrão máx.:</label>
-                            <select id="maxAcomp" class="form-select" style="padding: 0.5rem; font-size: 0.85rem;">
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4" selected>4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                                <option value="13">13</option>
-                                <option value="14">14</option>
-                                <option value="15">15</option>
-                                <option value="16">16</option>
-                                <option value="17">17</option>
-                                <option value="18">18</option>
-                                <option value="19">19</option>
-                                <option value="20">20</option>
-                            </select>
-                        </div>
+                        <button onclick="adicionar()" style="align-self: flex-start; height: fit-content;">Adicionar</button>
                     </div>
                 </div>
             </div>
@@ -411,7 +385,7 @@
             const linhas = namesInput.value.split('\n').map(n => n.trim()).filter(n => n);
             if (linhas.length === 0) { toastShow('Digite pelo menos um nome'); return; }
 
-            const defaultMax = document.getElementById('maxAcomp').value;
+            const defaultMax = 4; // Padrão quando não especifica
             // Usa nome + max como chave para detectar duplicatas
             const existentes = new Set(convidados.map(c => {
                 const params = new URLSearchParams(c.link.split('?')[1] || '');
