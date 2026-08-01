@@ -196,6 +196,44 @@
         }
         .card-expandido > * + * { margin-top: 0.5rem; }
 
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .pagination button {
+            padding: 0.45rem 0.85rem;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-family: inherit;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .pagination button:hover:not(:disabled) {
+            border-color: var(--gold-deep);
+            background: #fdfaf4;
+        }
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .pagination button.active {
+            background: var(--ink);
+            color: var(--cream);
+            border-color: var(--ink);
+        }
+        .pagination .info {
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            padding: 0 0.5rem;
+        }
+
         .empty, .loading, .error {
             text-align: center;
             padding: 2rem 1rem;
@@ -278,6 +316,9 @@
             <div class="loading"><span class="spinner"></span> Carregando confirmações...</div>
         </div>
 
+        <!-- PAGINAÇÃO -->
+        <div class="pagination" id="pagination"></div>
+
         <footer>
             <a href="/gerar.html">🔗 Gerar Links</a> · <a href="/confirmados.html">📋 Confirmados</a> · <span style="opacity:0.5">Atualiza automaticamente</span>
         </footer>
@@ -288,8 +329,11 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoa2NpbHFrdGNkZXZra3lzb3ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3NTk5NzksImV4cCI6MjEwMDMzNTk3OX0.gGg83qvinqHsZkdRacGYVRheCwawWeUKAHCiEpni9LU';
 
         const listaEl = document.getElementById('lista');
+        const paginationEl = document.getElementById('pagination');
         let allData = [];
         let currentFilter = 'todos';
+        let currentPage = 1;
+        const ITEMS_PER_PAGE = 15;
 
         function escapeHtml(s) {
             if (!s) return '';
@@ -326,10 +370,19 @@
 
             if (filtered.length === 0) {
                 listaEl.innerHTML = '<div class="empty">Nenhuma confirmação ainda. Aguardando respostas...</div>';
+                paginationEl.innerHTML = '';
                 return;
             }
 
-            listaEl.innerHTML = filtered.map((d, idx) => {
+            const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const pageItems = filtered.slice(start, end);
+
+            listaEl.innerHTML = pageItems.map((d) => {
                 const badgeClass = d.presenca === 'Sim' ? 'badge-sim' : 'badge-nao';
                 const badgeIcon = d.presenca === 'Sim' ? '✓' : '✕';
                 const badgeText = d.presenca === 'Sim' ? 'Confirmou' : 'Não vai';
@@ -366,6 +419,51 @@
                     </div>
                 `;
             }).join('');
+
+            renderPagination(totalPages, filtered.length, start, end);
+        }
+
+        function renderPagination(totalPages, totalItems, start, end) {
+            if (totalPages <= 1) {
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Anterior</button>
+            `;
+
+            // Limita números de páginas visíveis
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            if (endPage - startPage < maxVisible - 1) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            if (startPage > 1) {
+                html += `<button onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) html += `<span class="info">...</span>`;
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button onclick="goToPage(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) html += `<span class="info">...</span>`;
+                html += `<button onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+
+            html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Próxima →</button>`;
+
+            paginationEl.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderList();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function toggleExpand(card) {
@@ -404,6 +502,7 @@
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentFilter = btn.dataset.filter;
+                currentPage = 1;
                 renderList();
             });
         });
