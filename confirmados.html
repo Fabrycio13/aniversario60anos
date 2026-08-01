@@ -34,46 +34,34 @@
         }
 
         .sidebar {
-            width: 180px;
+            width: 160px;
             flex-shrink: 0;
         }
         .sidebar-nav {
             position: sticky;
             top: 2rem;
-            background: #fff;
-            border: 1px solid var(--gold);
-            border-radius: 12px;
-            padding: 1rem;
-            box-shadow: 0 4px 15px rgba(197, 158, 78, 0.15);
-        }
-        .sidebar-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--ink);
-            margin-bottom: 1rem;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
         .nav-btn {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            width: 100%;
-            padding: 0.7rem 0.8rem;
-            background: none;
-            border: 1px solid transparent;
-            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            background: #fff;
+            border: 1px solid var(--gold);
+            border-radius: 10px;
             font-size: 0.88rem;
             font-family: inherit;
             color: var(--ink-soft);
-            cursor: pointer;
+            text-decoration: none;
             transition: all 0.2s;
-            margin-bottom: 0.3rem;
-            text-align: left;
+            box-shadow: 0 2px 8px rgba(197, 158, 78, 0.1);
         }
         .nav-btn:hover {
             background: rgba(197, 158, 78, 0.1);
-            border-color: var(--gold);
+            transform: translateX(3px);
         }
         .nav-btn.active {
             background: var(--ink);
@@ -134,7 +122,31 @@
             margin-top: 0.4rem;
         }
 
-        /* Removido .filters e .filter-btn - agora usa .sidebar .nav-btn */
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-family: inherit;
+            color: var(--ink);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover { border-color: var(--gold-deep); }
+        .filter-btn.active {
+            background: var(--ink);
+            color: var(--cream);
+            border-color: var(--ink);
+        }
 
         .lista { display: flex; flex-direction: column; gap: 0.5rem; }
 
@@ -349,35 +361,13 @@
 
         footer {
             text-align: center;
-            margin-top: 3rem;
-            padding: 1.5rem;
-            border-top: 1px solid var(--line);
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(42, 32, 23, 0.05);
-        }
-        footer .nav-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 0.5rem;
-        }
-        footer a {
-            color: var(--gold-deep);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-        footer a:hover {
-            background: rgba(197, 158, 78, 0.1);
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--ink-soft);
+            font-size: 0.75rem;
         }
         footer .auto-update {
             color: var(--ink-soft);
-            font-size: 0.75rem;
-            opacity: 0.8;
         }
 
         /* Modal de Edição */
@@ -550,19 +540,13 @@
 </head>
 <body>
     <div class="wrap">
-        <!-- SIDEBAR -->
         <aside class="sidebar">
             <nav class="sidebar-nav">
-                <div class="sidebar-title">📋 Filtros</div>
-                <button class="nav-btn active" data-filter="todos">Todos</button>
-                <button class="nav-btn" data-filter="Sim">✓ Confirmados</button>
-                <button class="nav-btn" data-filter="Não">✕ Não vão</button>
-                <hr style="border: none; border-top: 1px solid var(--line); margin: 1rem 0;">
                 <a href="/gerar.html" class="nav-btn">🔗 Gerar Links</a>
+                <a href="/confirmados.html" class="nav-btn active">📋 Confirmados</a>
             </nav>
         </aside>
 
-        <!-- CONTEÚDO PRINCIPAL -->
         <main class="main-content">
             <header>
                 <h1>Confirmações</h1>
@@ -598,6 +582,13 @@
                     <option value="nome-asc">Nome A → Z</option>
                     <option value="nome-desc">Nome Z → A</option>
                 </select>
+            </div>
+
+            <!-- FILTROS -->
+            <div class="filters">
+                <button class="filter-btn active" data-filter="todos">Todos</button>
+                <button class="filter-btn" data-filter="Sim">Confirmados</button>
+                <button class="filter-btn" data-filter="Não">Não vão</button>
             </div>
 
             <!-- LISTA -->
@@ -972,10 +963,10 @@
             }
         }
 
-        // Filtros da sidebar
-        document.querySelectorAll('.sidebar .nav-btn[data-filter]').forEach(btn => {
+        // Filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.sidebar .nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentFilter = btn.dataset.filter;
                 currentPage = 1;
