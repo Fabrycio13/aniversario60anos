@@ -294,11 +294,12 @@
 
                 <div class="card">
                     <label>Adicionar nomes (um por linha)</label>
+                    <p class="hint" style="margin-bottom: 0.8rem;">Use o formato: <strong>Nome - máximo</strong> (ex: Maria Silva - 3). Se não especificar, usa o padrão abaixo.</p>
                     <div class="row">
-                        <textarea id="namesInput" placeholder="Maria Silva&#10;João Santos&#10;Fabrycio Bermudes"></textarea>
+                        <textarea id="namesInput" placeholder="Maria Silva - 3&#10;João Santos&#10;Pedro - 0"></textarea>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem; align-self: flex-start;">
                             <button onclick="adicionar()">Adicionar</button>
-                            <label style="font-size: 0.7rem; text-transform: none; letter-spacing: 0;">Máx. acomp.:</label>
+                            <label style="font-size: 0.7rem; text-transform: none; letter-spacing: 0;">Padrão máx.:</label>
                             <select id="maxAcomp" class="form-select" style="padding: 0.5rem; font-size: 0.85rem;">
                                 <option value="0">0</option>
                                 <option value="1">1</option>
@@ -308,7 +309,6 @@
                             </select>
                         </div>
                     </div>
-                    <p class="hint">Digite ou cole nomes novos. Se um nome já existir na lista, ele é ignorado.</p>
                 </div>
             </div>
 
@@ -353,10 +353,9 @@
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        function buildLink(n) {
+        function buildLink(nome, max) {
             const base = baseUrlInput.value.trim().replace(/\/?$/, '/');
-            const max = document.getElementById('maxAcomp').value;
-            return base + '?nome=' + encodeURIComponent(n.trim()) + '&max=' + max;
+            return base + '?nome=' + encodeURIComponent(nome.trim()) + '&max=' + max;
         }
 
         // ---- CARREGAR ----
@@ -379,32 +378,41 @@
                 return;
             }
             counter.textContent = `${convidados.length} convidado${convidados.length > 1 ? 's' : ''}`;
-            linksList.innerHTML = convidados.map((c, i) => `
+            linksList.innerHTML = convidados.map((c, i) => {
+                const params = new URLSearchParams(c.link.split('?')[1] || '');
+                const max = params.get('max') || '4';
+                return `
                 <div class="link-item">
-                    <span class="link-nome">${c.nome}</span>
+                    <span class="link-nome">${c.nome} <small style="color: var(--gold); font-weight: normal;">(máx ${max})</small></span>
                     <span class="link-url">${c.link}</span>
                     <button class="copy-btn" onclick="copiar(${c.id})">Copiar</button>
                     <button class="del-btn" onclick="deletar(${c.id})">✕</button>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         // ---- ADICIONAR ----
         async function adicionar() {
-            const nomes = namesInput.value.split('\n').map(n => n.trim()).filter(n => n);
-            if (nomes.length === 0) { toastShow('Digite pelo menos um nome'); return; }
+            const linhas = namesInput.value.split('\n').map(n => n.trim()).filter(n => n);
+            if (linhas.length === 0) { toastShow('Digite pelo menos um nome'); return; }
 
-            // Verifica duplicatas
+            const defaultMax = document.getElementById('maxAcomp').value;
             const existentes = new Set(convidados.map(c => c.nome.toLowerCase().trim()));
             const novos = [];
             const ignorados = [];
 
-            for (const n of nomes) {
-                if (existentes.has(n.toLowerCase())) {
-                    ignorados.push(n);
+            for (const linha of linhas) {
+                // Parse: "Nome - 3" ou só "Nome"
+                const match = linha.match(/^(.+?)\s*-\s*(\d+)$/);
+                const nome = match ? match[1].trim() : linha;
+                const max = match ? match[2] : defaultMax;
+                const nomeLower = nome.toLowerCase();
+
+                if (existentes.has(nomeLower)) {
+                    ignorados.push(nome);
                 } else {
-                    novos.push(n);
-                    existentes.add(n.toLowerCase());
+                    novos.push({ nome, max });
+                    existentes.add(nomeLower);
                 }
             }
 
@@ -414,11 +422,11 @@
 
             if (novos.length === 0) return;
 
-            for (const nome of novos) {
+            for (const item of novos) {
                 await fetch(SB_URL + '/rest/v1/links_gerados', {
                     method: 'POST',
                     headers: sbH(),
-                    body: JSON.stringify({ nome: nome, link: buildLink(nome) })
+                    body: JSON.stringify({ nome: item.nome, link: buildLink(item.nome, item.max) })
                 }).catch(() => {});
             }
 
