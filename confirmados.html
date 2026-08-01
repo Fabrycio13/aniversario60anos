@@ -114,7 +114,7 @@
         }
         .card-linha {
             display: grid;
-            grid-template-columns: 120px minmax(150px, 1fr) auto auto auto;
+            grid-template-columns: 130px 1fr 90px 40px 100px;
             align-items: center;
             gap: 0.5rem;
         }
@@ -143,6 +143,9 @@
             font-size: 0.78rem;
             color: var(--ink-soft);
             white-space: nowrap;
+        }
+        .detalhe-pill.vazio {
+            visibility: hidden;
         }
         .badge {
             display: inline-flex;
@@ -666,11 +669,9 @@
                         <div class="card-linha">
                             <span class="data-linha">${formatDate(d.created_at)}</span>
                             <span class="nome">${escapeHtml(d.nome)}</span>
-                            ${d.presenca === 'Sim' && qtdDep > 0 ? `
-                                <span class="detalhe-pill">
-                                    👥 ${totalPessoas} ${totalPessoas === 1 ? 'pessoa' : 'pessoas'}
-                                </span>
-                            ` : ''}
+                            <span class="detalhe-pill ${d.presenca === 'Sim' && qtdDep > 0 ? '' : 'vazio'}">
+                                ${d.presenca === 'Sim' && qtdDep > 0 ? '👥 ' + totalPessoas + ' ' + (totalPessoas === 1 ? 'pessoa' : 'pessoas') : ''}
+                            </span>
                             <button class="btn-editar" onclick="event.stopPropagation(); abrirModalEdicao('${escapeHtml(nomeId)}')" title="Editar">✏️</button>
                             <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
                         </div>
