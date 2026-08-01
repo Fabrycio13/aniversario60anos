@@ -605,6 +605,29 @@
             text-align: center;
         }
 
+        .aviso-grupo-maior {
+            display: none;
+            margin-top: 1rem;
+            padding: 0.9rem 1.1rem;
+            background: rgba(197, 158, 78, 0.1);
+            border: 1px dashed var(--gold-primary);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .aviso-grupo-maior.visible {
+            display: block;
+        }
+        .aviso-grupo-maior a {
+            color: var(--gold-dark);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .aviso-grupo-maior a:hover {
+            text-decoration: underline;
+        }
+
         .btn-submit {
             width: 100%;
             padding: 1.1rem 2rem;
@@ -935,10 +958,12 @@
                                     <option value="2">2 acompanhantes</option>
                                     <option value="3">3 acompanhantes</option>
                                     <option value="4">4 acompanhantes</option>
-                                    <option value="5">5 ou mais acompanhantes</option>
                                 </select>
                             </div>
                             <div id="dependentes-nomes"></div>
+                            <div class="aviso-grupo-maior" id="aviso-grupo-maior">
+                                Para grupos maiores que 4 pessoas, entre em contato diretamente pelo WhatsApp: <a href="https://wa.me/5521XXXXXXXX" target="_blank">clicando aqui</a>
+                            </div>
                         </div>
 
                         <!-- Mensagem ao Anfitrião -->
@@ -1142,29 +1167,23 @@
             function renderDepInputs() {
                 const qtd = parseInt(qtdDep.value, 10);
                 depNomes.innerHTML = '';
+                const aviso = document.getElementById('aviso-grupo-maior');
 
-                if (qtd === 0) return;
+                if (qtd === 0) {
+                    if (aviso) aviso.classList.remove('visible');
+                    return;
+                }
 
-                if (qtd <= 4) {
-                    for (let i = 1; i <= qtd; i++) {
-                        const row = document.createElement('div');
-                        row.className = 'dependente-row';
-                        row.innerHTML = `
-                            <span class="dep-number">${i}.</span>
-                            <input type="text" class="dep-nome"
-                                   name="acompanhante_${i}"
-                                   placeholder="Nome completo do acompanhante ${i}" />
-                        `;
-                        depNomes.appendChild(row);
-                    }
-                } else {
+                if (aviso) aviso.classList.add('visible');
+
+                for (let i = 1; i <= qtd; i++) {
                     const row = document.createElement('div');
                     row.className = 'dependente-row';
                     row.innerHTML = `
-                        <span class="dep-number">✚</span>
+                        <span class="dep-number">${i}.</span>
                         <input type="text" class="dep-nome"
-                               name="acompanhantes_lista"
-                               placeholder="Nomes de todos os acompanhantes (separados por vírgula)" />
+                               name="acompanhante_${i}"
+                               placeholder="Nome completo do acompanhante ${i}" />
                     `;
                     depNomes.appendChild(row);
                 }
@@ -1236,7 +1255,7 @@
                 let acompanhantes = '';
                 if (presenca === 'Sim') {
                     const qtd = parseInt(qtdDep.value, 10);
-                    if (qtd > 0 && qtd <= 4) {
+                    if (qtd > 0) {
                         const nomes = depNomes.querySelectorAll('.dep-nome');
                         const lista = [];
                         nomes.forEach(input => {
@@ -1244,9 +1263,6 @@
                             if (v) lista.push(v);
                         });
                         acompanhantes = lista.join('; ');
-                    } else if (qtd >= 5) {
-                        const input = depNomes.querySelector('.dep-nome');
-                        if (input) acompanhantes = input.value.trim();
                     }
                 }
 
