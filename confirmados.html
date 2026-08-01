@@ -670,8 +670,11 @@
                     ? d.acompanhantes.split(';').map(n => n.trim()).filter(n => n)
                     : [];
 
+                // Nome seguro para usar como ID
+                const nomeId = d.nome || '';
+
                 return `
-                    <div class="card" onclick="toggleExpand(event, this)" data-id="${escapeHtml(d.id || d.nome)}">
+                    <div class="card" onclick="toggleExpand(event, this)" data-nome="${escapeHtml(nomeId)}">
                         <div class="card-linha">
                             <span class="data-linha">${formatDate(d.created_at)}</span>
                             <span class="nome">${escapeHtml(d.nome)}</span>
@@ -681,7 +684,7 @@
                                 </span>
                             ` : ''}
                             <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
-                            <button class="btn-editar" onclick="event.stopPropagation(); abrirModalEdicao('${escapeHtml(d.id || d.nome)}')">✏️ Editar</button>
+                            <button class="btn-editar" onclick="event.stopPropagation(); abrirModalEdicao('${escapeHtml(nomeId)}')">✏️ Editar</button>
                         </div>
                         <div class="card-expandido">
                             ${nomesAcompanhantes.length > 0 ? `
@@ -755,12 +758,15 @@
         }
 
         // ===== MODAL DE EDIÇÃO =====
-        let editandoId = null;
+        let editandoNome = null;
 
-        function abrirModalEdicao(id) {
-            editandoId = id;
-            const item = allData.find(d => (d.id || d.nome) === id);
-            if (!item) return;
+        function abrirModalEdicao(nome) {
+            editandoNome = nome;
+            const item = allData.find(d => d.nome === nome);
+            if (!item) {
+                console.error('Item não encontrado:', nome);
+                return;
+            }
 
             document.getElementById('edit-nome').value = item.nome || '';
             document.getElementById('edit-presenca').value = item.presenca || 'Sim';
@@ -798,7 +804,7 @@
 
         function fecharModal() {
             document.getElementById('modal-editar').classList.remove('visible');
-            editandoId = null;
+            editandoNome = null;
         }
 
         document.getElementById('edit-qtd-acomp').addEventListener('change', function() {
