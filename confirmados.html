@@ -240,6 +240,43 @@
             padding: 0 0.5rem;
         }
 
+        .controles {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .busca {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            background: #fff;
+            color: var(--ink);
+        }
+        .busca:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .ordenacao {
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            background: #fff;
+            color: var(--ink);
+            cursor: pointer;
+        }
+        .ordenacao:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
         .empty, .loading, .error {
             text-align: center;
             padding: 2rem 1rem;
@@ -310,6 +347,17 @@
             *inclui acompanhantes
         </p>
 
+        <!-- CONTROLES -->
+        <div class="controles">
+            <input type="text" class="busca" id="busca" placeholder="Buscar por nome..." />
+            <select class="ordenacao" id="ordenacao">
+                <option value="data-desc">Mais recentes primeiro</option>
+                <option value="data-asc">Mais antigos primeiro</option>
+                <option value="nome-asc">Nome A → Z</option>
+                <option value="nome-desc">Nome Z → A</option>
+            </select>
+        </div>
+
         <!-- FILTROS -->
         <div class="filters">
             <button class="filter-btn active" data-filter="todos">Todos</button>
@@ -336,8 +384,12 @@
 
         const listaEl = document.getElementById('lista');
         const paginationEl = document.getElementById('pagination');
+        const buscaEl = document.getElementById('busca');
+        const ordenacaoEl = document.getElementById('ordenacao');
         let allData = [];
         let currentFilter = 'todos';
+        let currentBusca = '';
+        let currentOrdenacao = 'data-desc';
         let currentPage = 1;
         const ITEMS_PER_PAGE = 15;
 
@@ -370,15 +422,41 @@
         }
 
         function renderList() {
-            const filtered = currentFilter === 'todos'
-                ? allData
+            // Filtra por status
+            let filtered = currentFilter === 'todos'
+                ? [...allData]
                 : allData.filter(d => d.presenca === currentFilter);
 
+            // Filtra por nome
+            if (currentBusca.trim()) {
+                const termo = currentBusca.toLowerCase().trim();
+                filtered = filtered.filter(d =>
+                    d.nome.toLowerCase().includes(termo) ||
+                    (d.acompanhantes && d.acompanhantes.toLowerCase().includes(termo))
+                );
+            }
+
             if (filtered.length === 0) {
-                listaEl.innerHTML = '<div class="empty">Nenhuma confirmação ainda. Aguardando respostas...</div>';
+                listaEl.innerHTML = '<div class="empty">Nenhuma confirmação encontrada.</div>';
                 paginationEl.innerHTML = '';
                 return;
             }
+
+            // Ordena
+            filtered.sort((a, b) => {
+                switch (currentOrdenacao) {
+                    case 'data-asc':
+                        return new Date(a.created_at) - new Date(b.created_at);
+                    case 'data-desc':
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    case 'nome-asc':
+                        return a.nome.localeCompare(b.nome, 'pt-BR');
+                    case 'nome-desc':
+                        return b.nome.localeCompare(a.nome, 'pt-BR');
+                    default:
+                        return 0;
+                }
+            });
 
             const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
             if (currentPage > totalPages) currentPage = totalPages;
@@ -509,6 +587,20 @@
                 currentPage = 1;
                 renderList();
             });
+        });
+
+        // Busca por nome
+        buscaEl.addEventListener('input', () => {
+            currentBusca = buscaEl.value;
+            currentPage = 1;
+            renderList();
+        });
+
+        // Ordenação
+        ordenacaoEl.addEventListener('change', () => {
+            currentOrdenacao = ordenacaoEl.value;
+            currentPage = 1;
+            renderList();
         });
 
         // Atualiza a cada 30s
