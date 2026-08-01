@@ -27,6 +27,7 @@
         .wrap {
             max-width: 720px;
             margin: 0 auto;
+            padding: 1.5rem 1rem 2rem 8rem;
         }
         header {
             text-align: center;
@@ -184,9 +185,70 @@
             pointer-events: none;
         }
         .copied-toast.show { opacity: 1; }
+
+        .sidebar {
+            position: fixed;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1rem;
+            background: #fff;
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            color: var(--ink-soft);
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(197, 158, 78, 0.15);
+            white-space: nowrap;
+        }
+        .nav-btn:hover {
+            background: rgba(197, 158, 78, 0.1);
+            transform: translateX(3px);
+        }
+        .nav-btn.active {
+            background: var(--ink);
+            color: var(--cream);
+            border-color: var(--ink);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: static;
+                top: auto;
+                left: auto;
+                transform: none;
+                margin-bottom: 1rem;
+            }
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <a href="/gerar.html" class="nav-btn active">🔗 Gerar Links</a>
+            <a href="/confirmados.html" class="nav-btn">📋 Confirmados</a>
+        </nav>
+    </aside>
+
     <div class="wrap">
         <header>
             <h1>Gerador de Links</h1>
@@ -222,12 +284,6 @@
     </div>
 
     <div class="copied-toast" id="toast">Copiado!</div>
-
-    <footer style="text-align:center;padding:1.5rem;color:var(--ink-soft);font-size:0.8rem;">
-        <a href="/confirmados.html" style="color:var(--gold-deep);text-decoration:none;">📋 Confirmados</a>
-        ·
-        <a href="/gerar.html" style="color:var(--gold-deep);text-decoration:none;">🔗 Gerar Links</a>
-    </footer>
 
     <script>
         const baseUrlInput = document.getElementById('baseUrl');
