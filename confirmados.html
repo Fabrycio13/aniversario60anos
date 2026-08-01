@@ -784,16 +784,27 @@
             for (let i = 0; i < qtd; i++) {
                 addAcompEditRow(nomes[i] || '');
             }
+            atualizarQtdAcomp();
         }
 
         function addAcompEditRow(valor = '') {
             const container = document.getElementById('edit-acompanhantes');
             const row = document.createElement('div');
             row.className = 'acomp-edit-row';
-            row.innerHTML = `
-                <input type="text" placeholder="Nome do acompanhante" value="${escapeHtml(valor)}" />
-                <button type="button" onclick="this.parentElement.remove()">✕</button>
-            `;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'Nome do acompanhante';
+            input.value = valor;
+            input.addEventListener('input', atualizarQtdAcomp);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = '✕';
+            btn.onclick = function() {
+                row.remove();
+                atualizarQtdAcomp();
+            };
+            row.appendChild(input);
+            row.appendChild(btn);
             container.appendChild(row);
         }
 
@@ -807,20 +818,27 @@
             renderAcompEditRows(qtd, '');
         });
 
+        // Atualiza a quantidade em tempo real baseado nos nomes preenchidos
+        function atualizarQtdAcomp() {
+            const inputs = document.querySelectorAll('#edit-acompanhantes input');
+            const count = Array.from(inputs).filter(i => i.value.trim()).length;
+            document.getElementById('edit-qtd-acomp').value = count;
+        }
+
         document.getElementById('form-editar').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const nome = document.getElementById('edit-nome').value.trim();
             const presenca = document.getElementById('edit-presenca').value;
-            const qtdAcomp = parseInt(document.getElementById('edit-qtd-acomp').value);
             const mensagem = document.getElementById('edit-mensagem').value.trim();
 
-            // Coleta nomes dos acompanhantes
+            // Coleta nomes dos acompanhantes (só os preenchidos)
             const acompInputs = document.querySelectorAll('#edit-acompanhantes input');
             const acompNomes = Array.from(acompInputs)
                 .map(i => i.value.trim())
                 .filter(n => n);
             const acompanhantesStr = acompNomes.join('; ');
+            const qtdAcomp = acompNomes.length;
 
             const data = {
                 nome: nome,
