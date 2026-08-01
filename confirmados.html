@@ -113,20 +113,16 @@
             border-color: var(--gold);
         }
         .card-linha {
-            display: flex;
+            display: grid;
+            grid-template-columns: 120px minmax(150px, 1fr) auto auto auto;
             align-items: center;
             gap: 0.5rem;
-            flex-wrap: nowrap;
-            overflow: hidden;
-            justify-content: flex-start;
         }
         .data-linha {
             font-size: 0.72rem;
             color: var(--ink-soft);
             opacity: 0.7;
             white-space: nowrap;
-            flex-shrink: 0;
-            min-width: 120px;
         }
         .nome {
             font-family: 'Cormorant Garamond', serif;
@@ -136,8 +132,6 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex-shrink: 0;
-            max-width: 200px;
         }
         .detalhe-pill {
             display: inline-flex;
@@ -149,7 +143,6 @@
             font-size: 0.78rem;
             color: var(--ink-soft);
             white-space: nowrap;
-            flex-shrink: 0;
         }
         .badge {
             display: inline-flex;
@@ -161,7 +154,6 @@
             font-weight: 600;
             letter-spacing: 0.04em;
             white-space: nowrap;
-            flex-shrink: 0;
         }
         .badge-sim {
             background: #d4ead2;
@@ -434,7 +426,6 @@
             font-size: 0.75rem;
             color: var(--ink-soft);
             transition: all 0.15s;
-            flex-shrink: 0;
             line-height: 1;
         }
         .btn-editar:hover {
@@ -445,12 +436,11 @@
 
         @media (max-width: 600px) {
             .stats { grid-template-columns: repeat(2, 1fr); }
-            .nome { font-size: 1.05rem; max-width: 120px; }
+            .nome { font-size: 1.05rem; max-width: 100px; }
             header h1 { font-size: 1.7rem; }
-            .data-linha { min-width: 100px; font-size: 0.68rem; }
-            .controles {
-                flex-direction: column;
-            }
+            .card-linha { grid-template-columns: 90px minmax(100px, 1fr) auto auto; }
+            .data-linha { font-size: 0.65rem; }
+            .controles { flex-direction: column; }
             .busca { min-width: 100%; }
         }
     </style>
