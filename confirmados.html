@@ -49,16 +49,21 @@
         }
         .stat {
             background: #fff;
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            padding: 1rem;
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.2rem 1rem;
             text-align: center;
-            box-shadow: 0 4px 14px -8px rgba(42, 32, 23, 0.1);
+            box-shadow: 0 4px 15px -8px rgba(197, 158, 78, 0.25);
+            transition: all 0.2s;
+        }
+        .stat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px -8px rgba(197, 158, 78, 0.35);
         }
         .stat-num {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: var(--gold-deep);
             line-height: 1;
         }
@@ -67,7 +72,7 @@
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: var(--ink-soft);
-            margin-top: 0.3rem;
+            margin-top: 0.4rem;
         }
 
         .filters {
