@@ -26,20 +26,19 @@
             line-height: 1.6;
         }
         .wrap {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
-            display: flex;
-            gap: 1.5rem;
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem 2rem 8rem;
         }
 
         .sidebar {
-            width: 160px;
-            flex-shrink: 0;
+            position: fixed;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
         }
         .sidebar-nav {
-            position: sticky;
-            top: 2rem;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
@@ -48,16 +47,17 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.8rem 1rem;
+            padding: 0.7rem 1rem;
             background: #fff;
             border: 1px solid var(--gold);
             border-radius: 10px;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-family: inherit;
             color: var(--ink-soft);
             text-decoration: none;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(197, 158, 78, 0.1);
+            box-shadow: 0 2px 8px rgba(197, 158, 78, 0.15);
+            white-space: nowrap;
         }
         .nav-btn:hover {
             background: rgba(197, 158, 78, 0.1);
@@ -69,11 +69,6 @@
             border-color: var(--ink);
         }
 
-        .main-content {
-            flex: 1;
-            min-width: 0;
-        }
-
         header {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -83,8 +78,8 @@
         header h1 {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 500;
-            font-size: 2rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
         }
         header p { color: var(--ink-soft); font-size: 0.85rem; }
 
@@ -505,32 +500,23 @@
 
         @media (max-width: 768px) {
             .wrap {
-                flex-direction: column;
                 padding: 1rem;
             }
             .sidebar {
-                width: 100%;
+                position: static;
+                top: auto;
+                left: auto;
+                transform: none;
+                margin-bottom: 1rem;
             }
             .sidebar-nav {
-                position: static;
-                display: flex;
+                flex-direction: row;
                 flex-wrap: wrap;
-                gap: 0.5rem;
-                align-items: center;
-            }
-            .sidebar-title {
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-            .sidebar-nav hr {
-                display: none;
-            }
-            .sidebar-nav .nav-btn {
-                margin-bottom: 0;
+                justify-content: center;
             }
             .stats { grid-template-columns: repeat(2, 1fr); }
             .nome { font-size: 1.05rem; max-width: 100px; }
-            header h1 { font-size: 1.7rem; }
+            header h1 { font-size: 1.6rem; }
             .card-linha { grid-template-columns: 90px minmax(100px, 1fr) auto auto; }
             .data-linha { font-size: 0.65rem; }
             .controles { flex-direction: column; }
