@@ -608,6 +608,7 @@
         .aviso-grupo-maior {
             display: none;
             margin-top: 1rem;
+            margin-bottom: 1.5rem;
             padding: 0.9rem 1.1rem;
             background: rgba(197, 158, 78, 0.1);
             border: 1px dashed var(--gold-primary);
@@ -626,6 +627,13 @@
         }
         .aviso-grupo-maior a:hover {
             text-decoration: underline;
+        }
+
+        #mensagem-group {
+            margin-top: 1.6rem;
+        }
+        .dependentes-section.visible ~ #mensagem-group {
+            margin-top: 0.5rem;
         }
 
         .btn-submit {
@@ -967,7 +975,7 @@
                         </div>
 
                         <!-- Mensagem ao Anfitrião -->
-                        <div class="form-group">
+                        <div class="form-group" id="mensagem-group">
                             <label for="mensagem">Deixe uma mensagem para a Maria</label>
                             <textarea id="mensagem" name="mensagem" class="form-textarea"
                                       placeholder="Deixe um carinho, parabéns ou observação especial..."></textarea>
