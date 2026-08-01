@@ -237,6 +237,22 @@
                 flex-wrap: wrap;
                 justify-content: center;
             }
+            .main-grid {
+                flex-direction: column;
+            }
+            .card-col {
+                width: 100%;
+            }
+        }
+
+        .main-grid {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .card-col {
+            flex: 1;
+            min-width: 0;
         }
     </style>
 </head>
@@ -255,30 +271,38 @@
             <p>Festa Dona Maria — 60 Anos</p>
         </header>
 
-        <div class="card">
-            <label>URL base do convite</label>
-            <input type="text" id="baseUrl" class="base-url"
-                   value="https://aniversario60anos.vercel.app/" />
-            <p class="hint">Mude aqui se o site estiver em outro domínio</p>
-        </div>
+        <div class="main-grid">
+            <!-- Coluna Esquerda: URL + Adicionar nomes -->
+            <div class="card-col">
+                <div class="card">
+                    <label>URL base do convite</label>
+                    <input type="text" id="baseUrl" class="base-url"
+                           value="https://aniversario60anos.vercel.app/" />
+                    <p class="hint">Mude aqui se o site estiver em outro domínio</p>
+                </div>
 
-        <div class="card">
-            <label>Adicionar nomes (um por linha)</label>
-            <div class="row">
-                <textarea id="namesInput" placeholder="Maria Silva&#10;João Santos&#10;Fabrycio Bermudes"></textarea>
-                <button onclick="adicionar()" style="align-self: flex-start;">Adicionar</button>
+                <div class="card">
+                    <label>Adicionar nomes (um por linha)</label>
+                    <div class="row">
+                        <textarea id="namesInput" placeholder="Maria Silva&#10;João Santos&#10;Fabrycio Bermudes"></textarea>
+                        <button onclick="adicionar()" style="align-self: flex-start;">Adicionar</button>
+                    </div>
+                    <p class="hint">Digite ou cole nomes novos. Se um nome já existir na lista, ele é ignorado.</p>
+                </div>
             </div>
-            <p class="hint">Digite ou cole nomes novos. Se um nome já existir na lista, ele é ignorado.</p>
-        </div>
 
-        <div class="card">
-            <div class="counter" id="counter">0 convidados</div>
-            <div class="row" style="margin-bottom: 0.8rem;">
-                <button onclick="copiarTodos()" class="gold">📋 Copiar todos</button>
-                <button onclick="limpar()" style="background: #888;">🗑️ Limpar tudo</button>
-            </div>
-            <div class="links-list" id="linksList">
-                <div class="empty">Nenhum convidado ainda. Adicione nomes acima.</div>
+            <!-- Coluna Direita: Links Gerados -->
+            <div class="card-col">
+                <div class="card">
+                    <div class="counter" id="counter">0 convidados</div>
+                    <div class="row" style="margin-bottom: 0.8rem;">
+                        <button onclick="copiarTodos()" class="gold">📋 Copiar todos</button>
+                        <button onclick="limpar()" style="background: #888;">🗑️ Limpar tudo</button>
+                    </div>
+                    <div class="links-list" id="linksList">
+                        <div class="empty">Nenhum convidado ainda. Adicione nomes acima.</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
