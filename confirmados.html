@@ -532,23 +532,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Quantidade de Acompanhantes</label>
-                    <select id="edit-qtd-acomp">
-                        <option value="0">Nenhum</option>
-                        <option value="1">1 pessoa</option>
-                        <option value="2">2 pessoas</option>
-                        <option value="3">3 pessoas</option>
-                        <option value="4">4 pessoas</option>
-                        <option value="5">5 pessoas</option>
-                        <option value="6">6 pessoas</option>
-                        <option value="7">7 pessoas</option>
-                        <option value="8">8 pessoas</option>
-                        <option value="9">9 pessoas</option>
-                        <option value="10">10 pessoas</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Nomes dos Acompanhantes</label>
+                    <label>Nomes dos Acompanhantes <span id="edit-qtd-label">(0)</span></label>
                     <div id="edit-acompanhantes"></div>
                     <button type="button" class="btn-add-acomp" onclick="addAcompEditRow()">+ Adicionar acompanhante</button>
                 </div>
@@ -767,23 +751,18 @@
             document.getElementById('edit-presenca').value = item.presenca || 'Sim';
             document.getElementById('edit-mensagem').value = item.mensagem || '';
 
-            const qtd = parseInt(item.qtd_dependentes) || 0;
-            document.getElementById('edit-qtd-acomp').value = qtd;
-
-            // Renderiza campos de acompanhantes
-            renderAcompEditRows(qtd, item.acompanhantes);
+            // Renderiza campos de acompanhantes (baseado nos nomes existentes)
+            renderAcompEditRows(item.acompanhantes);
 
             document.getElementById('modal-editar').classList.add('visible');
         }
 
-        function renderAcompEditRows(qtd, acompanhantesStr) {
+        function renderAcompEditRows(acompanhantesStr) {
             const container = document.getElementById('edit-acompanhantes');
             const nomes = acompanhantesStr ? acompanhantesStr.split(';').map(n => n.trim()).filter(n => n) : [];
             container.innerHTML = '';
 
-            for (let i = 0; i < qtd; i++) {
-                addAcompEditRow(nomes[i] || '');
-            }
+            nomes.forEach(nome => addAcompEditRow(nome));
             atualizarQtdAcomp();
         }
 
@@ -813,16 +792,11 @@
             editandoNome = null;
         }
 
-        document.getElementById('edit-qtd-acomp').addEventListener('change', function() {
-            const qtd = parseInt(this.value);
-            renderAcompEditRows(qtd, '');
-        });
-
         // Atualiza a quantidade em tempo real baseado nos nomes preenchidos
         function atualizarQtdAcomp() {
             const inputs = document.querySelectorAll('#edit-acompanhantes input');
             const count = Array.from(inputs).filter(i => i.value.trim()).length;
-            document.getElementById('edit-qtd-acomp').value = count;
+            document.getElementById('edit-qtd-label').textContent = '(' + count + ')';
         }
 
         document.getElementById('form-editar').addEventListener('submit', async function(e) {
