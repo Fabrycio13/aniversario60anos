@@ -418,15 +418,16 @@
             background: var(--gold-deep);
         }
         .btn-editar {
-            padding: 0.3rem 0.5rem;
+            padding: 0.2rem 0.35rem;
             background: none;
             border: 1px solid var(--line);
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             color: var(--ink-soft);
             transition: all 0.15s;
             flex-shrink: 0;
+            line-height: 1;
         }
         .btn-editar:hover {
             background: #faf3e2;
@@ -685,8 +686,8 @@
                                     👥 ${totalPessoas} ${totalPessoas === 1 ? 'pessoa' : 'pessoas'}
                                 </span>
                             ` : ''}
-                            <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
                             <button class="btn-editar" onclick="event.stopPropagation(); abrirModalEdicao('${escapeHtml(nomeId)}')" title="Editar">✏️</button>
+                            <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
                         </div>
                         <div class="card-expandido">
                             ${nomesAcompanhantes.length > 0 ? `
