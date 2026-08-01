@@ -310,14 +310,34 @@
         footer {
             text-align: center;
             margin-top: 3rem;
-            padding-top: 1.5rem;
+            padding: 1.5rem;
             border-top: 1px solid var(--line);
-            color: var(--ink-soft);
-            font-size: 0.8rem;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(42, 32, 23, 0.05);
+        }
+        footer .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
         }
         footer a {
             color: var(--gold-deep);
             text-decoration: none;
+            font-weight: 500;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        footer a:hover {
+            background: rgba(197, 158, 78, 0.1);
+        }
+        footer .auto-update {
+            color: var(--ink-soft);
+            font-size: 0.75rem;
+            opacity: 0.8;
         }
 
         /* Modal de Edição */
@@ -521,7 +541,11 @@
         <div class="pagination" id="pagination"></div>
 
         <footer>
-            <a href="/gerar.html">🔗 Gerar Links</a> · <a href="/confirmados.html">📋 Confirmados</a> · <span style="opacity:0.5">Atualiza automaticamente</span>
+            <div class="nav-links">
+                <a href="/gerar.html">🔗 Gerar Links</a>
+                <a href="/confirmados.html">📋 Confirmados</a>
+            </div>
+            <div class="auto-update">🔄 Atualiza automaticamente a cada 30s</div>
         </footer>
     </div>
 
