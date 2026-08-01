@@ -963,6 +963,12 @@
                                     <option value="2">2 acompanhantes</option>
                                     <option value="3">3 acompanhantes</option>
                                     <option value="4">4 acompanhantes</option>
+                                    <option value="5">5 acompanhantes</option>
+                                    <option value="6">6 acompanhantes</option>
+                                    <option value="7">7 acompanhantes</option>
+                                    <option value="8">8 acompanhantes</option>
+                                    <option value="9">9 acompanhantes</option>
+                                    <option value="10">10 acompanhantes</option>
                                 </select>
                             </div>
                             <div id="dependentes-nomes"></div>
@@ -1044,7 +1050,7 @@
                 const maxAcomp = parseInt(params.get('max'), 10);
 
                 // Se tem parâmetro max, limita as opções do dropdown
-                if (!isNaN(maxAcomp) && maxAcomp >= 0 && maxAcomp <= 4) {
+                if (!isNaN(maxAcomp) && maxAcomp >= 0 && maxAcomp <= 10) {
                     const options = qtdDep.querySelectorAll('option');
                     options.forEach(opt => {
                         const val = parseInt(opt.value, 10);
