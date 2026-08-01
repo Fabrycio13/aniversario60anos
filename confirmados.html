@@ -136,6 +136,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .data-linha {
+            font-size: 0.72rem;
+            color: var(--ink-soft);
+            opacity: 0.7;
+            white-space: nowrap;
+        }
         .badge {
             display: inline-flex;
             align-items: center;
@@ -395,14 +401,13 @@
                 return `
                     <div class="card" onclick="toggleExpand(this)" ${!temInfoExtra ? 'style="cursor:default"' : ''}>
                         <div class="card-linha">
-                            <div class="card-esquerda">
-                                <span class="nome">${escapeHtml(d.nome)}</span>
-                                ${d.presenca === 'Sim' && qtdDep > 0 ? `
-                                    <span class="detalhe-pill">
-                                        👥 ${totalPessoas} ${totalPessoas === 1 ? 'pessoa' : 'pessoas'}
-                                    </span>
-                                ` : ''}
-                            </div>
+                            <span class="data-linha">${formatDate(d.created_at)}</span>
+                            <span class="nome">${escapeHtml(d.nome)}</span>
+                            ${d.presenca === 'Sim' && qtdDep > 0 ? `
+                                <span class="detalhe-pill">
+                                    👥 ${totalPessoas} ${totalPessoas === 1 ? 'pessoa' : 'pessoas'}
+                                </span>
+                            ` : ''}
                             <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
                         </div>
                         <div class="card-expandido">
@@ -414,7 +419,6 @@
                             ${d.mensagem && d.mensagem.trim() ? `
                                 <div class="mensagem">"${escapeHtml(d.mensagem)}"</div>
                             ` : ''}
-                            <div class="data">Confirmado em ${formatDate(d.created_at)}</div>
                         </div>
                     </div>
                 `;
