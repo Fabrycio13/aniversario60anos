@@ -403,7 +403,11 @@
             if (linhas.length === 0) { toastShow('Digite pelo menos um nome'); return; }
 
             const defaultMax = document.getElementById('maxAcomp').value;
-            const existentes = new Set(convidados.map(c => c.nome.toLowerCase().trim()));
+            // Usa nome + max como chave para detectar duplicatas
+            const existentes = new Set(convidados.map(c => {
+                const params = new URLSearchParams(c.link.split('?')[1] || '');
+                return (c.nome + '|' + (params.get('max') || '4')).toLowerCase();
+            }));
             const novos = [];
             const ignorados = [];
 
@@ -412,18 +416,18 @@
                 const match = linha.match(/^(.+?)\s*-\s*(\d+)$/);
                 const nome = match ? match[1].trim() : linha;
                 const max = match ? match[2] : defaultMax;
-                const nomeLower = nome.toLowerCase();
+                const chave = (nome + '|' + max).toLowerCase();
 
-                if (existentes.has(nomeLower)) {
-                    ignorados.push(nome);
+                if (existentes.has(chave)) {
+                    ignorados.push(linha);
                 } else {
                     novos.push({ nome, max });
-                    existentes.add(nomeLower);
+                    existentes.add(chave);
                 }
             }
 
             if (ignorados.length > 0) {
-                toastShow(`${ignorados.length} já existente${ignorados.length > 1 ? 's' : ''}: ${ignorados.join(', ')}`);
+                toastShow(`${ignorados.length} já existente${ignorados.length > 1 ? 's' : ''}: ${ignorados.slice(0, 5).join(', ')}${ignorados.length > 5 ? '...' : ''}`);
             }
 
             if (novos.length === 0) return;
