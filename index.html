@@ -1040,6 +1040,28 @@
             const depNomes = document.getElementById('dependentes-nomes');
 
             // ============================================================
+            // 0. LER PARÂMETROS DA URL (max acompanhantes)
+            // ============================================================
+            (function initUrlParams() {
+                const params = new URLSearchParams(window.location.search);
+                const maxAcomp = parseInt(params.get('max'), 10);
+
+                // Se tem parâmetro max, limita as opções do dropdown
+                if (!isNaN(maxAcomp) && maxAcomp >= 0 && maxAcomp <= 4) {
+                    const options = qtdDep.querySelectorAll('option');
+                    options.forEach(opt => {
+                        const val = parseInt(opt.value, 10);
+                        opt.style.display = val <= maxAcomp ? '' : 'none';
+                    });
+
+                    // Se max=0, esconde toda a seção de acompanhantes
+                    if (maxAcomp === 0) {
+                        depSection.style.display = 'none';
+                    }
+                }
+            })();
+
+            // ============================================================
             // 1. ANIMAÇÃO DE PARTÍCULAS DOURADAS BRILHANTES E VIVAS
             // ============================================================
             function initParticles() {

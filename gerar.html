@@ -257,6 +257,14 @@
             flex: 1;
             min-width: 0;
         }
+        .form-select {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            background: #fff;
+        }
     </style>
 </head>
 <body>
@@ -288,7 +296,17 @@
                     <label>Adicionar nomes (um por linha)</label>
                     <div class="row">
                         <textarea id="namesInput" placeholder="Maria Silva&#10;João Santos&#10;Fabrycio Bermudes"></textarea>
-                        <button onclick="adicionar()" style="align-self: flex-start;">Adicionar</button>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; align-self: flex-start;">
+                            <button onclick="adicionar()">Adicionar</button>
+                            <label style="font-size: 0.7rem; text-transform: none; letter-spacing: 0;">Máx. acomp.:</label>
+                            <select id="maxAcomp" class="form-select" style="padding: 0.5rem; font-size: 0.85rem;">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4" selected>4</option>
+                            </select>
+                        </div>
                     </div>
                     <p class="hint">Digite ou cole nomes novos. Se um nome já existir na lista, ele é ignorado.</p>
                 </div>
@@ -337,7 +355,8 @@
 
         function buildLink(n) {
             const base = baseUrlInput.value.trim().replace(/\/?$/, '/');
-            return base + '?nome=' + encodeURIComponent(n.trim());
+            const max = document.getElementById('maxAcomp').value;
+            return base + '?nome=' + encodeURIComponent(n.trim()) + '&max=' + max;
         }
 
         // ---- CARREGAR ----
