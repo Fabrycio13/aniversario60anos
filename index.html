@@ -1298,10 +1298,20 @@
                     if (qtd > 0) {
                         const nomes = depNomes.querySelectorAll('.dep-nome');
                         const lista = [];
+                        let faltando = false;
                         nomes.forEach(input => {
                             const v = input.value.trim();
-                            if (v) lista.push(v);
+                            if (v) {
+                                lista.push(v);
+                            } else {
+                                faltando = true;
+                            }
                         });
+                        if (faltando) {
+                            showMessage('error', 'Por favor, preencha o nome de todos os acompanhantes.');
+                            setLoading(false);
+                            return;
+                        }
                         acompanhantes = lista.join('; ');
                     }
                 }
