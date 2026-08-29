@@ -84,7 +84,7 @@ Abra o `index.html` e edite:
 |-------|-----------|
 | **Nome da festa** | `<h1>Festa Dona Maria</h1>` |
 | **Data e horário** | `<strong>15 de Novembro de 2026</strong>` e `<strong>19h</strong>` |
-| **Local** | `Rua das Flores, 123 — Salão de Festas` |
+| **Local** | `Rua Armando Costa, 7 — Condomínio Fazenda Passaredo` |
 | **Traje** | `Esporte Fino` |
 | **Data limite** | `Confirme até 01/11` |
 | **Emoji do topo** | `🎉` (troque por 🎂 🎊 🥂 etc) |
