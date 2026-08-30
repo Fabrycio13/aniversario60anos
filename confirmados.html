@@ -810,8 +810,8 @@
                         <div class="card-linha">
                             <span class="data-linha">${formatDate(d.created_at)}</span>
                             <span class="nome">${escapeHtml(d.nome)}</span>
-                            <span class="detalhe-pill ${d.presenca === 'Sim' && qtdDep > 0 ? '' : 'vazio'}">
-                                ${d.presenca === 'Sim' && qtdDep > 0 ? '👥 ' + totalPessoas + ' ' + (totalPessoas === 1 ? 'pessoa' : 'pessoas') : ''}
+                            <span class="detalhe-pill ${d.presenca === 'Sim' ? '' : 'vazio'}">
+                                ${d.presenca === 'Sim' ? '👥 ' + totalPessoas + ' ' + (totalPessoas === 1 ? 'pessoa' : 'pessoas') : ''}
                             </span>
                             <button class="btn-editar" onclick="event.stopPropagation(); abrirModalEdicao('${escapeHtml(nomeId)}')" title="Editar">✏️</button>
                             <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
