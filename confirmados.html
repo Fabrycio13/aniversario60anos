@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --cream: #f7f1e3;
@@ -293,6 +294,23 @@
             margin-bottom: 1rem;
             flex-wrap: wrap;
             align-items: center;
+        }
+        .btn-exportar {
+            padding: 0.7rem 1.2rem;
+            background: #d4ead2;
+            border: 1px solid #2d5e2f;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            font-weight: 600;
+            color: #2d5e2f;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-exportar:hover {
+            background: #2d5e2f;
+            color: #fff;
         }
         .busca {
             flex: 1;
@@ -636,6 +654,7 @@
 
             <!-- CONTROLES -->
             <div class="controles">
+                <button class="btn-exportar" id="btn-exportar" onclick="exportarPDF()">📥 Exportar PDF</button>
                 <input type="text" class="busca" id="busca" placeholder="Buscar por nome..." />
                 <select class="ordenacao" id="ordenacao">
                     <option value="data-desc">Mais recentes primeiro</option>
@@ -936,6 +955,63 @@
             row.appendChild(input);
             row.appendChild(btn);
             container.appendChild(row);
+        }
+
+        function exportarPDF() {
+            const confirmados = allData.filter(d => d.presenca === 'Sim');
+
+            // Extrai todos os nomes de acompanhantes
+            const nomesAcompanhantes = [];
+            confirmados.forEach(d => {
+                if (d.acompanhantes && d.acompanhantes.trim()) {
+                    const nomes = d.acompanhantes.split(';')
+                        .map(n => n.trim())
+                        .filter(n => n);
+                    nomesAcompanhantes.push(...nomes);
+                }
+            });
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Cabeçalho
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Festa Dona Maria - 60 Anos', 105, 20, { align: 'center' });
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Lista de Acompanhantes Confirmados', 105, 30, { align: 'center' });
+
+            doc.setFontSize(10);
+            doc.setTextColor(120);
+            doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 105, 38, { align: 'center' });
+
+            // Total
+            doc.setFontSize(14);
+            doc.setTextColor(0);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`Total de acompanhantes: ${nomesAcompanhantes.length}`, 105, 50, { align: 'center' });
+
+            // Lista de nomes
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
+
+            if (nomesAcompanhantes.length === 0) {
+                doc.text('Nenhum acompanhante registrado.', 105, 65, { align: 'center' });
+            } else {
+                let y = 60;
+                nomesAcompanhantes.sort().forEach((nome, i) => {
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                    doc.text(`${i + 1}. ${nome}`, 20, y);
+                    y += 7;
+                });
+            }
+
+            doc.save('acompanhantes-festa-maria.pdf');
         }
 
         function fecharModal() {
