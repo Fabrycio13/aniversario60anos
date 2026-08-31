@@ -960,24 +960,14 @@
         function exportarPDF() {
             const confirmados = allData.filter(d => d.presenca === 'Sim');
 
-            // Extrai todos os nomes: titular + dependentes + acompanhantes
-            const todasPessoas = [];
+            // Extrai só os nomes de acompanhantes (não vazios)
+            const nomesAcompanhantes = [];
             confirmados.forEach(d => {
-                // Adiciona o titular
-                if (d.nome && d.nome.trim()) {
-                    todasPessoas.push(d.nome.trim());
-                }
-                // Adiciona os dependentes (genéricos)
-                const qtdDep = parseInt(d.qtd_dependentes) || 0;
-                for (let i = 0; i < qtdDep; i++) {
-                    todasPessoas.push(`(dependente)`);
-                }
-                // Adiciona os acompanhantes explícitos
                 if (d.acompanhantes && d.acompanhantes.trim()) {
                     const nomes = d.acompanhantes.split(';')
                         .map(n => n.trim())
                         .filter(n => n);
-                    todasPessoas.push(...nomes);
+                    nomesAcompanhantes.push(...nomes);
                 }
             });
 
@@ -991,7 +981,7 @@
 
             doc.setFontSize(12);
             doc.setFont('helvetica', 'normal');
-            doc.text('Lista de Pessoas Confirmadas', 105, 30, { align: 'center' });
+            doc.text('Lista de Acompanhantes', 105, 30, { align: 'center' });
 
             doc.setFontSize(10);
             doc.setTextColor(120);
@@ -1001,17 +991,17 @@
             doc.setFontSize(14);
             doc.setTextColor(0);
             doc.setFont('helvetica', 'bold');
-            doc.text(`Total de pessoas: ${todasPessoas.length}`, 105, 50, { align: 'center' });
+            doc.text(`Total: ${nomesAcompanhantes.length}`, 105, 50, { align: 'center' });
 
             // Lista de nomes
             doc.setFontSize(11);
             doc.setFont('helvetica', 'normal');
 
-            if (todasPessoas.length === 0) {
-                doc.text('Nenhuma pessoa confirmada.', 105, 65, { align: 'center' });
+            if (nomesAcompanhantes.length === 0) {
+                doc.text('Nenhum acompanhante registrado.', 105, 65, { align: 'center' });
             } else {
                 let y = 60;
-                todasPessoas.sort().forEach((nome, i) => {
+                nomesAcompanhantes.sort().forEach((nome, i) => {
                     if (y > 270) {
                         doc.addPage();
                         y = 20;
