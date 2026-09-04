@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Organização — Festa Maria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --cream: #f7f1e3;
+            --gold: #c9a876;
+            --gold-deep: #a8865a;
+            --ink: #2a2017;
+            --ink-soft: #6b5a4a;
+            --line: rgba(168, 134, 90, 0.2);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+        .wrap {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 2rem 8rem;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1rem;
+            background: #fff;
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            color: var(--ink-soft);
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(197, 158, 78, 0.15);
+            white-space: nowrap;
+        }
+        .nav-btn:hover {
+            background: rgba(197, 158, 78, 0.1);
+            transform: translateX(3px);
+        }
+        .nav-btn.active {
+            background: var(--ink);
+            color: var(--cream);
+            border-color: var(--ink);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--line);
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            font-size: 2.5rem;
+            margin-bottom: 0.3rem;
+        }
+        header p { color: var(--ink-soft); font-size: 0.9rem; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat {
+            background: #fff;
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 15px -8px rgba(197, 158, 78, 0.25);
+            transition: all 0.2s;
+        }
+        .stat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px -8px rgba(197, 158, 78, 0.35);
+        }
+        .stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 2rem;
+            color: var(--gold-deep);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--ink-soft);
+            margin-top: 0.4rem;
+        }
+
+        .controles {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .btn-exportar {
+            padding: 0.7rem 1.2rem;
+            background: #d4ead2;
+            border: 1px solid #2d5e2f;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            font-weight: 600;
+            color: #2d5e2f;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-exportar:hover {
+            background: #2d5e2f;
+            color: #fff;
+        }
+        .btn-adicionar {
+            padding: 0.7rem 1.2rem;
+            background: #dbeafe;
+            border: 1px solid #2563eb;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            font-weight: 600;
+            color: #2563eb;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-adicionar:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+        .busca {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            background: #fff;
+            color: var(--ink);
+            box-shadow: 0 2px 8px rgba(197, 158, 78, 0.1);
+        }
+        .busca:focus {
+            outline: none;
+            border-color: var(--gold-deep);
+            box-shadow: 0 0 0 3px rgba(197, 158, 78, 0.15);
+        }
+        .busca::placeholder {
+            color: var(--ink-soft);
+            opacity: 0.6;
+        }
+
+        .lista { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 0.85rem 1.2rem;
+            box-shadow: 0 2px 8px -4px rgba(42, 32, 23, 0.08);
+            transition: all 0.15s;
+        }
+        .card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px -4px rgba(42, 32, 23, 0.12);
+            border-color: var(--gold);
+        }
+        .card-linha {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .card-linha .nome {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: var(--ink);
+            flex: 1;
+        }
+        .card-linha .funcao {
+            font-size: 0.88rem;
+            color: var(--gold-deep);
+            font-weight: 500;
+            background: rgba(197, 158, 78, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+        .card-linha .btn-editar {
+            padding: 0.4rem 0.6rem;
+            background: var(--gold);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #fff;
+            transition: all 0.15s;
+        }
+        .card-linha .btn-editar:hover {
+            background: var(--gold-deep);
+        }
+        .card-linha .btn-excluir {
+            padding: 0.4rem 0.6rem;
+            background: #f5d8d4;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #8a2c1f;
+            transition: all 0.15s;
+        }
+        .card-linha .btn-excluir:hover {
+            background: #e5b8b2;
+        }
+
+        .empty, .loading, .error {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--ink-soft);
+            font-size: 0.95rem;
+        }
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--line);
+            border-top-color: var(--gold-deep);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error { color: #b33a2a; }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--ink-soft);
+            font-size: 0.75rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.visible {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 14px;
+            padding: 1.8rem;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--ink);
+        }
+        .modal .form-group {
+            margin-bottom: 1rem;
+        }
+        .modal label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .modal input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: #fff;
+        }
+        .modal input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .modal-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+        .modal-actions button {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-cancelar {
+            background: #f0f0f0;
+            color: var(--ink);
+        }
+        .btn-salvar {
+            background: var(--gold);
+            color: #fff;
+        }
+        .btn-salvar:hover {
+            background: var(--gold-deep);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem 0.5rem; }
+            .wrap { padding: 0; }
+            .sidebar {
+                position: static;
+                top: auto;
+                left: auto;
+                transform: none;
+                margin-bottom: 1rem;
+            }
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.3rem;
+            }
+            .nav-btn { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+            header h1 { font-size: 1.5rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+            .controles { flex-direction: column; gap: 0.5rem; }
+            .busca { min-width: 100%; }
+            .card-linha { flex-wrap: wrap; }
+            .card-linha .nome { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/gerar.html" class="nav-btn">🔗 Gerar Links</a>
+                <a href="/confirmados.html" class="nav-btn">📋 Confirmados</a>
+                <a href="/organizacao.html" class="nav-btn active">👥 Organização</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Equipe de Organização</h1>
+                <p>Festa Dona Maria — 60 Anos</p>
+            </header>
+
+            <!-- ESTATÍSTICAS -->
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-num" id="stat-total">—</div>
+                    <div class="stat-label">Total de membros</div>
+                </div>
+            </div>
+
+            <!-- CONTROLES -->
+            <div class="controles">
+                <button class="btn-adicionar" onclick="abrirModalAdicionar()">+ Adicionar Membro</button>
+                <button class="btn-exportar" onclick="exportarPDF()">📥 Exportar PDF</button>
+                <input type="text" class="busca" id="busca" placeholder="Buscar por nome ou função..." />
+            </div>
+
+            <!-- LISTA -->
+            <div id="lista" class="lista">
+                <div class="loading"><span class="spinner"></span> Carregando equipe...</div>
+            </div>
+
+            <footer>
+                <div>Gerencie aqui a equipe de organização do evento</div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Modal Adicionar/Editar -->
+    <div class="modal-overlay" id="modal-form">
+        <div class="modal">
+            <h3 id="modal-titulo">➕ Adicionar Membro</h3>
+            <form id="form-membro">
+                <input type="hidden" id="edit-id" />
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" id="input-nome" placeholder="Nome completo" required />
+                </div>
+                <div class="form-group">
+                    <label>Função</label>
+                    <input type="text" id="input-funcao" placeholder="Ex: Fotógrafo, Segurança, Decoração..." required />
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-salvar">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://qhkcilqktcdevkkysovp.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoa2NpbHFrdGNkZXZra3lzb3ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3NTk5NzksImV4cCI6MjEwMDMzNTk3OX0.gGg83qvinqHsZkdRacGYVRheCwawWeUKAHCiEpni9LU';
+
+        let allData = [];
+        let editandoId = null;
+
+        function renderList() {
+            const termo = document.getElementById('busca').value.toLowerCase().trim();
+            
+            let filtered = allData;
+            if (termo) {
+                filtered = allData.filter(d =>
+                    (d.nome && d.nome.toLowerCase().includes(termo)) ||
+                    (d.funcao && d.funcao.toLowerCase().includes(termo))
+                );
+            }
+
+            filtered.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+
+            if (filtered.length === 0) {
+                document.getElementById('lista').innerHTML = '<div class="empty">Nenhum membro encontrado.</div>';
+                return;
+            }
+
+            document.getElementById('lista').innerHTML = filtered.map((d) => `
+                <div class="card">
+                    <div class="card-linha">
+                        <span class="nome">${escapeHtml(d.nome)}</span>
+                        <span class="funcao">${escapeHtml(d.funcao)}</span>
+                        <button class="btn-editar" onclick="abrirModalEditar(${d.id}, '${escapeHtml(d.nome)}', '${escapeHtml(d.funcao)}')" title="Editar">✏️</button>
+                        <button class="btn-excluir" onclick="excluirMembro(${d.id})" title="Excluir">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(s) {
+            if (s == null || typeof s !== 'string') return '';
+            return s.replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        async function carregar() {
+            try {
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/organizacao?select=*&order=nome.asc`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    }
+                );
+
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+
+                allData = await res.json();
+                document.getElementById('stat-total').textContent = allData.length;
+                renderList();
+
+            } catch (err) {
+                console.error('Erro:', err);
+                document.getElementById('lista').innerHTML = `<div class="error">Erro ao carregar: ${err.message}</div>`;
+            }
+        }
+
+        function abrirModalAdicionar() {
+            editandoId = null;
+            document.getElementById('modal-titulo').textContent = '➕ Adicionar Membro';
+            document.getElementById('edit-id').value = '';
+            document.getElementById('input-nome').value = '';
+            document.getElementById('input-funcao').value = '';
+            document.getElementById('modal-form').classList.add('visible');
+        }
+
+        function abrirModalEditar(id, nome, funcao) {
+            editandoId = id;
+            document.getElementById('modal-titulo').textContent = '✏️ Editar Membro';
+            document.getElementById('edit-id').value = id;
+            document.getElementById('input-nome').value = nome;
+            document.getElementById('input-funcao').value = funcao;
+            document.getElementById('modal-form').classList.add('visible');
+        }
+
+        function fecharModal() {
+            document.getElementById('modal-form').classList.remove('visible');
+            editandoId = null;
+        }
+
+        document.getElementById('form-membro').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('input-nome').value.trim();
+            const funcao = document.getElementById('input-funcao').value.trim();
+
+            try {
+                if (editandoId) {
+                    // Atualizar
+                    const res = await fetch(
+                        `${SUPABASE_URL}/rest/v1/organizacao?id=eq.${editandoId}`,
+                        {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify({ nome, funcao })
+                        }
+                    );
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                } else {
+                    // Inserir
+                    const res = await fetch(
+                        `${SUPABASE_URL}/rest/v1/organizacao`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify({ nome, funcao })
+                        }
+                    );
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                }
+
+                fecharModal();
+                carregar();
+
+            } catch (err) {
+                console.error('Erro ao salvar:', err);
+                alert('Erro ao salvar: ' + err.message);
+            }
+        });
+
+        async function excluirMembro(id) {
+            if (!confirm('Tem certeza que deseja excluir este membro?')) return;
+
+            try {
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/organizacao?id=eq.${id}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                        }
+                    }
+                );
+
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+
+                carregar();
+
+            } catch (err) {
+                console.error('Erro ao excluir:', err);
+                alert('Erro ao excluir: ' + err.message);
+            }
+        }
+
+        function exportarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Festa Dona Maria - 60 Anos', 105, 20, { align: 'center' });
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Equipe de Organizacao', 105, 30, { align: 'center' });
+
+            doc.setFontSize(10);
+            doc.setTextColor(120);
+            doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 105, 38, { align: 'center' });
+
+            doc.setFontSize(14);
+            doc.setTextColor(0);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`Total: ${allData.length}`, 105, 50, { align: 'center' });
+
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0);
+
+            if (allData.length === 0) {
+                doc.text('Nenhum membro cadastrado.', 105, 65, { align: 'center' });
+            } else {
+                let y = 60;
+                allData.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')).forEach((d, i) => {
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`${i + 1}. ${d.nome}`, 20, y);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(100);
+                    doc.text(`   Funcao: ${d.funcao}`, 20, y + 5);
+                    doc.setTextColor(0);
+                    y += 12;
+                });
+            }
+
+            doc.save('equipe-organizacao.pdf');
+        }
+
+        // Busca em tempo real
+        document.getElementById('busca').addEventListener('input', renderList);
+
+        // Fecha modal ao clicar fora
+        document.getElementById('modal-form').addEventListener('click', function(e) {
+            if (e.target === this) fecharModal();
+        });
+
+        // Inicia
+        carregar();
+    </script>
+</body>
+</html>
